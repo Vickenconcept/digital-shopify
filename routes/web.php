@@ -4,11 +4,13 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TwitterAuthController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [App\Http\Controllers\WelcomeController::class, 'index']);
+
+// Digital Content Download Route
+Route::get('download/{product}', [App\Http\Controllers\DigitalContentController::class, 'download'])->name('download.product');
+Route::get('/products', [App\Http\Controllers\ProductController::class, 'index'])->name('products.index');
+Route::get('/products/{product}', [App\Http\Controllers\ProductController::class, 'show'])->name('products.show');
 
 
 
@@ -32,21 +34,49 @@ Route::middleware('guest')->group(function () {
 
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('auth/logout', [AuthController::class, 'logout'])->name('auth.logout');
+    Route::post('auth/logout', [AuthController::class, 'logout'])->name('auth.logout');
     Route::get('/home', function () {
-        return view('dashboard');
+        $user = auth()->user();
+        if ($user->hasRole('admin') || $user->hasRole('super-admin')) {
+            return redirect()->route('admin.dashboard');
+        } else {
+            return redirect()->route('user.dashboard');
+        }
     })->name('home');
-
-    // Route::patch('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
-    // // Mark all notifications as read
-    // Route::patch('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
 
     Route::view('profile', 'profile')->name('profile');
     Route::post('profile/name', [ProfileController::class, 'changeName'])->name('changeName');
     Route::post('profile/password', [ProfileController::class, 'changePassword'])->name('changePassword');
-    // Route::resource('reseller', ResellerController::class);
+
+    // Admin routes
+    Route::prefix('admin')->name('admin.')->group(function () {
+    // Route::middleware(['role:admin|super-admin'])->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+        Route::resource('products', App\Http\Controllers\Admin\ProductController::class);
+        Route::post('products/{product}/toggle-status', [App\Http\Controllers\Admin\ProductController::class, 'toggleStatus'])->name('products.toggle-status');
+        Route::resource('categories', App\Http\Controllers\Admin\CategoryController::class);
+    Route::post('categories/{category}/toggle-status', [App\Http\Controllers\Admin\CategoryController::class, 'toggleStatus'])->name('categories.toggle-status');
+        Route::resource('orders', App\Http\Controllers\Admin\OrderController::class);
+        Route::resource('users', App\Http\Controllers\Admin\UserController::class);
+    });
+
+        // Payment routes
+           Route::prefix('payment')->name('payment.')->group(function () {
+               Route::post('checkout', [App\Http\Controllers\PaymentController::class, 'checkout'])->name('checkout');
+               Route::get('success', [App\Http\Controllers\PaymentController::class, 'handleCheckoutSuccess'])->name('success');
+               Route::post('intent/{order}', [App\Http\Controllers\PaymentController::class, 'createPaymentIntent'])->name('intent');
+               Route::post('webhook', [App\Http\Controllers\PaymentController::class, 'handleWebhook'])->name('webhook');
+               Route::post('refund/{order}', [App\Http\Controllers\PaymentController::class, 'refund'])
+                   ->middleware(['role:admin|super-admin'])
+                   ->name('refund');
+           });
+
+    // User routes
+    Route::middleware(['auth'])->prefix('user')->name('user.')->group(function () {
+        Route::get('dashboard', [App\Http\Controllers\User\DashboardController::class, 'index'])->name('dashboard');
+        Route::get('orders', [App\Http\Controllers\User\DashboardController::class, 'orders'])->name('orders');
+        Route::get('download/{product}', [App\Http\Controllers\User\DashboardController::class, 'download'])->name('download');
+        Route::get('stream/{product}', [App\Http\Controllers\User\DashboardController::class, 'stream'])->name('stream');
+    });
 
 });
-
-Route::get('/connect/twitter', [TwitterAuthController::class, 'redirectToTwitter'])->name('twitter.connect');
-Route::get('/connect/twitter/callback', [TwitterAuthController::class, 'handleTwitterCallback'])->name('twitter.callback');

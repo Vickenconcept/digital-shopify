@@ -6,11 +6,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -54,5 +55,34 @@ class User extends Authenticatable
     public function isTwitterConnected()
     {
         return $this->twitter_account_connected && $this->twitter_account_id && $this->twitter_access_token;
+    }
+
+    public function profile()
+    {
+        return $this->hasOne(UserProfile::class);
+    }
+
+    public function digitalProducts()
+    {
+        return $this->hasMany(DigitalProduct::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function purchasedProducts()
+    {
+        return $this->hasManyThrough(
+            DigitalProduct::class,
+            OrderItem::class,
+            'order_id',
+            'id',
+            'id',
+            'digital_product_id'
+        )->whereHas('order', function ($query) {
+            $query->where('payment_status', 'completed');
+        });
     }
 }

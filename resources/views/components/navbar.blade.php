@@ -92,12 +92,14 @@
                                 </a>
                             </li>
                             <li class="border-t border-gray-100">
-                                <a href="{{ route('auth.logout') }}"
-                                    class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
-                                    role="menuitem">
-                                    <i class='bx bx-log-out mr-3'></i>
-                                    Sign out
-                                </a>
+                                <form method="POST" action="{{ route('auth.logout') }}">
+                                    @csrf
+                                    <button type="submit" class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors w-full text-left"
+                                        role="menuitem">
+                                        <i class='bx bx-log-out mr-3'></i>
+                                        Sign out
+                                    </button>
+                                </form>
                             </li>
                         </ul>
                     </div>

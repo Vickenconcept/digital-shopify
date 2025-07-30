@@ -60,6 +60,13 @@ return [
             'report' => false,
         ],
 
+        'digital_content' => [
+            'driver' => 'local',
+            'root' => storage_path('app/digital_content'),
+            'throw' => false,
+            'report' => false,
+        ],
+
     ],
 
     /*
