@@ -100,7 +100,7 @@
         </button>
 
         <!-- Cart drawer -->
-        <div x-show="open" class="relative z-50" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
+        <div x-show="open" style="display: none;" class="relative z-50" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
             <div x-show="open" x-transition:enter="ease-in-out duration-500" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in-out duration-500" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-gray-500/75 transition-opacity"></div>
 
             <div class="fixed inset-0 overflow-hidden">

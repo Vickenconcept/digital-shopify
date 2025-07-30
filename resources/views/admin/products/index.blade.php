@@ -317,7 +317,13 @@
                                             @endif
                                         </div>
                                         <div class="text-right">
-                                            <p class="text-lg font-bold text-gray-900">${{ number_format($product->price, 2) }}</p>
+                                            @if($product->is_free)
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                    Free Resource
+                                                </span>
+                                            @else
+                                                <p class="text-lg font-bold text-gray-900">${{ number_format($product->price, 2) }}</p>
+                                            @endif
                                             <p class="text-xs text-gray-500">by {{ $product->user->name }}</p>
                                         </div>
                                     </div>
@@ -413,8 +419,14 @@
                                                 {{ ucfirst($product->file_type) }}
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                            ${{ number_format($product->price, 2) }}
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            @if($product->is_free)
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                    Free Resource
+                                                </span>
+                                            @else
+                                                <span class="text-sm font-medium text-gray-900">${{ number_format($product->price, 2) }}</span>
+                                            @endif
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             {{ $product->user->name }}

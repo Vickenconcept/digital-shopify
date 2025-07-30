@@ -149,6 +149,11 @@ class ProductController extends Controller
         $data = $request->validated();
         $data['slug'] = Str::slug($data['title']);
 
+        // If product is marked as free, ensure price is null
+        if ($data['is_free']) {
+            $data['price'] = null;
+        }
+
         if ($request->hasFile('file')) {
             $fileData = $this->fileUploadService->uploadDigitalContent($request->file('file'), $data['file_type']);
             $data = array_merge($data, $fileData);
