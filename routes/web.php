@@ -7,10 +7,24 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [App\Http\Controllers\WelcomeController::class, 'index']);
 
+// About Page
+Route::get('/about', [App\Http\Controllers\AboutController::class, 'index'])->name('about');
+
+// Blog Routes
+Route::get('/blog', [App\Http\Controllers\BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{blog:slug}', [App\Http\Controllers\BlogController::class, 'show'])->name('blog.show');
+Route::get('/blog/archive', [App\Http\Controllers\BlogController::class, 'archive'])->name('blog.archive');
+
+// Contact Page
+Route::get('/contact', [App\Http\Controllers\ContactController::class, 'index'])->name('contact');
+Route::post('/contact', [App\Http\Controllers\ContactController::class, 'store'])->name('contact.store');
+Route::post('/newsletter', [App\Http\Controllers\ContactController::class, 'newsletter'])->name('newsletter.subscribe');
+
 // Digital Content Download Route
 Route::get('download/{product}', [App\Http\Controllers\DigitalContentController::class, 'download'])->name('download.product');
 Route::get('/products', [App\Http\Controllers\ProductController::class, 'index'])->name('products.index');
-Route::get('/products/{product}', [App\Http\Controllers\ProductController::class, 'show'])->name('products.show');
+Route::get('/products/search', [App\Http\Controllers\ProductController::class, 'search'])->name('products.search');
+Route::get('/products/{product:slug}', [App\Http\Controllers\ProductController::class, 'show'])->name('products.show');
 
 
 
@@ -58,6 +72,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('categories/{category}/toggle-status', [App\Http\Controllers\Admin\CategoryController::class, 'toggleStatus'])->name('categories.toggle-status');
         Route::resource('orders', App\Http\Controllers\Admin\OrderController::class);
         Route::resource('users', App\Http\Controllers\Admin\UserController::class);
+        Route::resource('blogs', App\Http\Controllers\Admin\BlogController::class);
+        Route::post('blogs/{blog}/toggle-status', [App\Http\Controllers\Admin\BlogController::class, 'toggleStatus'])->name('blogs.toggle-status');
+        
+        // Site Settings
+        Route::get('/settings', [App\Http\Controllers\Admin\SiteSettingController::class, 'index'])->name('settings.index');
+        Route::put('/settings', [App\Http\Controllers\Admin\SiteSettingController::class, 'update'])->name('settings.update');
     });
 
         // Payment routes

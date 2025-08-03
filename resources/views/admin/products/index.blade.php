@@ -8,7 +8,7 @@
                     <p class="mt-2 text-gray-600">Manage your digital content library</p>
                 </div>
                 <div class="mt-4 sm:mt-0">
-                    <a href="{{ route('admin.products.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+                    <a href="{{ route('admin.products.create') }}" class="inline-flex items-center px-4 py-2 bg-orange-500 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors duration-200">
                         <svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                         </svg>
@@ -73,7 +73,7 @@
                                    x-model="searchTerm" 
                                    @keyup.enter="applyFilters()"
                                    placeholder="Title, description, or author..." 
-                                   class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500">
+                                   class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-orange-500 focus:border-orange-500">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -85,7 +85,7 @@
                     <!-- Category Filter -->
                     <div>
                         <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
-                        <select x-model="selectedCategory" class="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <select x-model="selectedCategory" class="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500">
                             <option value="">All Categories</option>
                             @foreach($categories as $category)
                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -96,7 +96,7 @@
                     <!-- Type Filter -->
                     <div>
                         <label for="type" class="block text-sm font-medium text-gray-700 mb-1">Type</label>
-                        <select x-model="selectedType" class="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <select x-model="selectedType" class="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500">
                             <option value="">All Types</option>
                             @foreach($availableTypes as $type)
                                 <option value="{{ $type }}">{{ ucfirst($type) }}</option>
@@ -107,7 +107,7 @@
                     <!-- Status Filter -->
                     <div>
                         <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                        <select x-model="selectedStatus" class="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <select x-model="selectedStatus" class="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500">
                             <option value="">All Status</option>
                             <option value="1">Active</option>
                             <option value="0">Inactive</option>
@@ -115,9 +115,9 @@
                     </div>
 
                     <!-- Sort Filter -->
-                    <div>
+<div>
                         <label for="sort" class="block text-sm font-medium text-gray-700 mb-1">Sort By</label>
-                        <select x-model="sortBy" class="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <select x-model="sortBy" class="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500">
                             <option value="latest">Latest</option>
                             <option value="oldest">Oldest</option>
                             <option value="title">Title (A-Z)</option>
@@ -130,7 +130,7 @@
                 <!-- Filter Buttons -->
                 <div class="mt-4 flex flex-wrap gap-3">
                     <button @click="applyFilters()" 
-                            class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+                            class="inline-flex items-center px-4 py-2 bg-orange-500 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors duration-200">
                         <svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.707A1 1 0 013 7V4z" />
                         </svg>
@@ -151,7 +151,7 @@
                     <div class="mt-4 flex flex-wrap gap-2">
                         <span class="text-sm font-medium text-gray-700">Active filters:</span>
                         @if(request('search'))
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
                                 Search: "{{ request('search') }}"
                             </span>
                         @endif
@@ -202,7 +202,7 @@
                         <span class="text-sm text-gray-500">View:</span>
                         <div class="flex rounded-lg border border-gray-200 p-1 bg-white">
                             <button @click="switchView('grid')" 
-                                    :class="viewMode === 'grid' ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'"
+                                    :class="viewMode === 'grid' ? 'bg-orange-500 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'"
                                     class="p-1.5 rounded-md transition-all duration-200" 
                                     title="Grid View">
                                 <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
@@ -210,7 +210,7 @@
                                 </svg>
                             </button>
                             <button @click="switchView('table')" 
-                                    :class="viewMode === 'table' ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'"
+                                    :class="viewMode === 'table' ? 'bg-orange-500 text-white shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'"
                                     class="p-1.5 rounded-md transition-all duration-200" 
                                     title="Table View">
                                 <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
@@ -253,12 +253,12 @@
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                                         @if($product->file_type === 'audio') bg-green-100 text-green-800
                                         @elseif($product->file_type === 'video') bg-red-100 text-red-800
-                                        @else bg-blue-100 text-blue-800
+                                        @else bg-orange-100 text-orange-800
                                         @endif">
                                         {{ ucfirst($product->file_type) }}
                                     </span>
-                                </div>
-                                
+</div>
+
                                 <div class="absolute top-3 right-3 flex space-x-1">
                                     @if($product->is_featured)
                                         <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
@@ -332,7 +332,7 @@
                                 <!-- Action Buttons -->
                                 <div class="flex gap-2">
                                     <a href="{{ route('admin.products.edit', $product) }}" 
-                                       class="flex-1 inline-flex items-center justify-center px-3 py-2 bg-blue-600 border border-transparent rounded-lg text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+                                       class="flex-1 inline-flex items-center justify-center px-3 py-2 bg-orange-500 border border-transparent rounded-lg text-sm font-medium text-white hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors duration-200">
                                         <svg class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                         </svg>
@@ -414,7 +414,7 @@
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
                                                 @if($product->file_type === 'audio') bg-green-100 text-green-800
                                                 @elseif($product->file_type === 'video') bg-red-100 text-red-800
-                                                @else bg-blue-100 text-blue-800
+                                                @else bg-orange-100 text-orange-800
                                                 @endif">
                                                 {{ ucfirst($product->file_type) }}
                                             </span>
@@ -468,7 +468,7 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <div class="flex space-x-2">
-                                                <a href="{{ route('admin.products.edit', $product) }}" class="text-blue-600 hover:text-blue-900">
+                                                <a href="{{ route('admin.products.edit', $product) }}" class="text-orange-500 hover:text-orange-700">
                                                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                                     </svg>
@@ -514,13 +514,13 @@
                 </p>
                 @if(request()->hasAny(['search', 'category', 'type', 'status', 'featured']))
                     <div class="mt-6">
-                        <a href="{{ route('admin.products.index') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white hover:bg-blue-700">
+                        <a href="{{ route('admin.products.index') }}" class="inline-flex items-center px-4 py-2 bg-orange-500 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white hover:bg-orange-600">
                             Clear Filters
                         </a>
                     </div>
                 @else
                     <div class="mt-6">
-                        <a href="{{ route('admin.products.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white hover:bg-blue-700">
+                        <a href="{{ route('admin.products.create') }}" class="inline-flex items-center px-4 py-2 bg-orange-500 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white hover:bg-orange-600">
                             <svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                             </svg>

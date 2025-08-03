@@ -31,7 +31,7 @@
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                 <div class="flex items-center">
                     <div class="flex-shrink-0">
-                        <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <div class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
                             <svg class="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                             </svg>
@@ -111,7 +111,7 @@
                                 <input type="text" name="title" id="title" 
                                        value="{{ old('title', $product->title) }}"
                                        placeholder="Enter product title..."
-                                       class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('title') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror">
+                                       class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors @error('title') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror">
                                 @error('title')
                                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
@@ -126,7 +126,7 @@
                                 <input type="text" name="author" id="author" 
                                        value="{{ old('author', $product->author) }}"
                                        placeholder="Enter author name..."
-                                       class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('author') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror">
+                                       class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors @error('author') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror">
                                 @error('author')
                                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
@@ -140,7 +140,7 @@
                                 </label>
                                 <textarea name="description" id="description" rows="6" 
                                           placeholder="Describe your product..."
-                                          class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none @error('description') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror">{{ old('description', $product->description) }}</textarea>
+                                          class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors resize-none @error('description') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror">{{ old('description', $product->description) }}</textarea>
                                 @error('description')
                                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
@@ -155,7 +155,7 @@
                                         Category <span class="text-red-500">*</span>
                                     </label>
                                     <select name="category_id" id="category_id" 
-                                            class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('category_id') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror">
+                                            class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors @error('category_id') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror">
                                         <option value="">Select a category</option>
                                         @foreach($categories as $category)
                                             <option value="{{ $category->id }}" {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}>
@@ -174,7 +174,7 @@
                                         File Type <span class="text-red-500">*</span>
                                     </label>
                                     <select name="file_type" id="file_type" 
-                                            class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('file_type') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror">
+                                            class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors @error('file_type') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror">
                                         <option value="">Select a file type</option>
                                         <option value="audio" {{ old('file_type', $product->file_type) == 'audio' ? 'selected' : '' }}>Audio</option>
                                         <option value="video" {{ old('file_type', $product->file_type) == 'video' ? 'selected' : '' }}>Video</option>
@@ -193,12 +193,12 @@
                                 </label>
                                 <div class="flex items-center space-x-4">
                                     <button type="button" @click="isFree = false" 
-                                            :class="!isFree ? 'bg-blue-600 text-white ring-2 ring-blue-600 ring-offset-2' : 'bg-white text-gray-700 hover:bg-gray-50'"
+                                            :class="!isFree ? 'bg-orange-500 text-white ring-2 ring-orange-500 ring-offset-2' : 'bg-white text-gray-700 hover:bg-gray-50'"
                                             class="px-4 py-2 rounded-lg border border-gray-300 font-medium text-sm transition-all duration-200">
                                         Paid Resource
                                     </button>
                                     <button type="button" @click="isFree = true" 
-                                            :class="isFree ? 'bg-blue-600 text-white ring-2 ring-blue-600 ring-offset-2' : 'bg-white text-gray-700 hover:bg-gray-50'"
+                                            :class="isFree ? 'bg-orange-500 text-white ring-2 ring-orange-500 ring-offset-2' : 'bg-white text-gray-700 hover:bg-gray-50'"
                                             class="px-4 py-2 rounded-lg border border-gray-300 font-medium text-sm transition-all duration-200">
                                         Free Resource
                                     </button>
@@ -220,7 +220,7 @@
                                                value="{{ old('price', $product->price) }}"
                                                placeholder="0.00"
                                                :required="!isFree"
-                                               class="block w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('price') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror">
+                                               class="block w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors @error('price') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror">
                                     </div>
                                     @error('price')
                                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -255,7 +255,7 @@
                                             <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                         </svg>
                                         <div class="text-sm text-gray-600">
-                                            <label for="file" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
+                                            <label for="file" class="relative cursor-pointer bg-white rounded-md font-medium text-orange-500 hover:text-orange-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
                                                 <span>Replace file</span>
                                                 <input id="file" name="file" type="file" class="sr-only" @change="handleFileChange($event)">
                                             </label>
@@ -290,7 +290,7 @@
                                             <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                         </svg>
                                         <div class="text-sm text-gray-600">
-                                            <label for="preview" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
+                                            <label for="preview" class="relative cursor-pointer bg-white rounded-md font-medium text-orange-500 hover:text-orange-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
                                                 <span>Replace preview</span>
                                                 <input id="preview" name="preview" type="file" class="sr-only" @change="handleFileChange($event)">
                                             </label>
@@ -365,7 +365,7 @@
                                             <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                         </svg>
                                         <div class="text-sm text-gray-600">
-                                            <label for="thumbnail" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
+                                            <label for="thumbnail" class="relative cursor-pointer bg-white rounded-md font-medium text-orange-500 hover:text-orange-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
                                                 <span x-show="!currentImage">Upload thumbnail</span>
                                                 <span x-show="currentImage">Replace thumbnail</span>
                                                 <input id="thumbnail" name="thumbnail" type="file" accept="image/*" 
@@ -399,8 +399,8 @@
                                 </label>
                                 <div class="flex items-center" x-data="{ active: {{ old('is_active', $product->is_active) ? 'true' : 'false' }} }">
                                     <button type="button" @click="active = !active" 
-                                            :class="active ? 'bg-blue-600' : 'bg-gray-200'"
-                                            class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                            :class="active ? 'bg-orange-500' : 'bg-gray-200'"
+                                            class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">
                                         <span :class="active ? 'translate-x-5' : 'translate-x-0'"
                                               class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
                                     </button>
@@ -417,8 +417,8 @@
                                 </label>
                                 <div class="flex items-center" x-data="{ featured: {{ old('is_featured', $product->is_featured) ? 'true' : 'false' }} }">
                                     <button type="button" @click="featured = !featured" 
-                                            :class="featured ? 'bg-blue-600' : 'bg-gray-200'"
-                                            class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                            :class="featured ? 'bg-orange-500' : 'bg-gray-200'"
+                                            class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">
                                         <span :class="featured ? 'translate-x-5' : 'translate-x-0'"
                                               class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
                                     </button>
@@ -458,14 +458,14 @@
 
                     <div class="flex items-center space-x-4">
                         <a href="{{ route('admin.products.index') }}" 
-                           class="inline-flex items-center px-6 py-3 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                           class="inline-flex items-center px-6 py-3 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors">
                             <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                             </svg>
                             Cancel
                         </a>
                         <button type="submit" 
-                                class="inline-flex items-center px-6 py-3 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                                class="inline-flex items-center px-6 py-3 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors">
                             <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                             </svg>

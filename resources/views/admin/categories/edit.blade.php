@@ -46,7 +46,7 @@
                         <input type="text" name="name" id="name" 
                                value="{{ old('name', $category->name) }}"
                                placeholder="Enter category name..."
-                               class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors @error('name') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror">
+                               class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors @error('name') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror">
                         @error('name')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -60,7 +60,7 @@
                         </label>
                         <textarea name="description" id="description" rows="4" 
                                   placeholder="Describe what this category contains..."
-                                  class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none @error('description') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror">{{ old('description', $category->description) }}</textarea>
+                                  class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors resize-none @error('description') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror">{{ old('description', $category->description) }}</textarea>
                         @error('description')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -117,7 +117,7 @@
                                         <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                     </svg>
                                     <div class="text-sm text-gray-600">
-                                        <label for="image_path" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
+                                        <label for="image_path" class="relative cursor-pointer bg-white rounded-md font-medium text-orange-500 hover:text-orange-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
                                             <span x-show="!currentImage">Upload an image</span>
                                             <span x-show="currentImage">Replace image</span>
                                             <input id="image_path" name="image_path" type="file" accept="image/*" 
@@ -149,8 +149,8 @@
                         </label>
                         <div class="flex items-center" x-data="{ active: {{ old('is_active', $category->is_active) ? 'true' : 'false' }} }">
                             <button type="button" @click="active = !active" 
-                                    :class="active ? 'bg-blue-600' : 'bg-gray-200'"
-                                    class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                    :class="active ? 'bg-orange-500' : 'bg-gray-200'"
+                                    class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">
                                 <span :class="active ? 'translate-x-5' : 'translate-x-0'"
                                       class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
                             </button>
@@ -164,7 +164,7 @@
 
             <!-- Category Statistics -->
             @if($category->digitalProducts()->count() > 0)
-                <div class="bg-blue-50 rounded-xl border border-blue-200 p-6">
+                <div class="bg-orange-50 rounded-xl border border-orange-200 p-6">
                     <div class="flex items-center">
                         <div class="flex-shrink-0">
                             <svg class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -172,8 +172,8 @@
                             </svg>
                         </div>
                         <div class="ml-3">
-                            <h3 class="text-sm font-medium text-blue-800">Category Usage</h3>
-                            <div class="mt-2 text-sm text-blue-700">
+                            <h3 class="text-sm font-medium text-orange-800">Category Usage</h3>
+                            <div class="mt-2 text-sm text-orange-700">
                                 <p>This category contains <strong>{{ $category->digitalProducts()->count() }}</strong> {{ Str::plural('product', $category->digitalProducts()->count()) }}.</p>
                                 @if(!$category->is_active)
                                     <p class="mt-1 font-medium">⚠️ This category is currently inactive, so products won't be visible to customers.</p>
@@ -210,14 +210,14 @@
 
                     <div class="flex items-center space-x-4">
                         <a href="{{ route('admin.categories.index') }}" 
-                           class="inline-flex items-center px-6 py-3 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                           class="inline-flex items-center px-6 py-3 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors">
                             <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                             </svg>
                             Cancel
                         </a>
                         <button type="submit" 
-                                class="inline-flex items-center px-6 py-3 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                                class="inline-flex items-center px-6 py-3 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors">
                             <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                             </svg>
