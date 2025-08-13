@@ -21,7 +21,7 @@
     @if($categories->isNotEmpty())
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
         <div class="flex items-center justify-between">
-            <h2 class="text-2xl font-bold tracking-tight text-gray-900">Shop by Category</h2>
+            <h2 class="text-2xl font-bold tracking-tight text-gray-900">Go by Category</h2>
             @if($categories->count() > 4)
             <a href="{{ route('products.index') }}" class="text-sm font-semibold text-indigo-600 hover:text-indigo-500">
                 View all categories <span aria-hidden="true">&rarr;</span>
@@ -53,14 +53,14 @@
     @if($featuredProducts->isNotEmpty())
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
         <div class="flex items-center justify-between">
-            <h2 class="text-2xl font-bold tracking-tight text-gray-900">Featured Products</h2>
+            <h2 class="text-2xl font-bold tracking-tight text-gray-900">Featured Contents</h2>
             @if($featuredProducts->count() > 4)
             <a href="{{ route('products.index', ['featured' => true]) }}" class="text-sm font-semibold text-orange-500 hover:text-orange-600">
-                View all featured products <span aria-hidden="true">&rarr;</span>
+                View all featured contents <span aria-hidden="true">&rarr;</span>
             </a>
             @endif
         </div>
-
+       
         <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
             @foreach($featuredProducts as $product)
                 <x-product-card :product="$product" />
