@@ -26,13 +26,13 @@ class DigitalProductRequest extends FormRequest
         ];
 
         if ($this->isMethod('POST')) {
-            $rules['file'] = ['required', 'file', 'max:512000']; // 500MB max
-            $rules['thumbnail'] = ['nullable', 'image', 'max:2048']; // 2MB max
-            $rules['preview'] = ['nullable', 'file', 'max:10240']; // 10MB max
+            $rules['file'] = ['required', 'file', 'max:512000', 'mimes:txt,pdf,doc,docx,png,jpg,jpeg,gif,webp,svg,psd,mp3,wav,flac,aac,ogg,wma,m4a,mp4,avi,mov,wmv,flv,webm,mkv,3gp']; // 500MB max
+            $rules['thumbnail'] = ['nullable', 'image', 'max:2048', 'mimes:png,jpg,jpeg,gif,webp,svg,psd']; // 2MB max
+            $rules['preview'] = ['nullable', 'file', 'max:10240', 'mimes:txt,pdf,doc,docx,png,jpg,jpeg,gif,webp,svg,psd,mp3,wav,flac,aac,ogg,wma,m4a,mp4,avi,mov,wmv,flv,webm,mkv,3gp']; // 10MB max
         } else {
-            $rules['file'] = ['nullable', 'file', 'max:512000'];
-            $rules['thumbnail'] = ['nullable', 'image', 'max:2048'];
-            $rules['preview'] = ['nullable', 'file', 'max:10240'];
+            $rules['file'] = ['nullable', 'file', 'max:512000', 'mimes:txt,pdf,doc,docx,png,jpg,jpeg,gif,webp,svg,psd,mp3,wav,flac,aac,ogg,wma,m4a,mp4,avi,mov,wmv,flv,webm,mkv,3gp'];
+            $rules['thumbnail'] = ['nullable', 'image', 'max:2048', 'mimes:png,jpg,jpeg,gif,webp,svg,psd'];
+            $rules['preview'] = ['nullable', 'file', 'max:10240', 'mimes:txt,pdf,doc,docx,png,jpg,jpeg,gif,webp,svg,psd,mp3,wav,flac,aac,ogg,wma,m4a,mp4,avi,mov,wmv,flv,webm,mkv,3gp'];
         }
 
         return $rules;

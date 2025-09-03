@@ -115,4 +115,15 @@ return [
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Contact Form Recipient
+    |--------------------------------------------------------------------------
+    |
+    | This email address will receive all contact form submissions.
+    |
+    */
+
+    'contact_recipient' => env('MAIL_CONTACT_RECIPIENT', env('MAIL_FROM_ADDRESS', 'hello@example.com')),
+
 ];

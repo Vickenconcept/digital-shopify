@@ -1,20 +1,42 @@
 <x-main-layout>
     <!-- Hero Section -->
-    <div class="relative bg-white">
-        <div class="mx-auto max-w-7xl lg:grid lg:grid-cols-12 lg:gap-x-8 lg:px-8">
-            <div class="px-6 pb-24 pt-10 sm:pb-32 lg:col-span-7 lg:px-0 lg:pb-56 lg:pt-48 xl:col-span-6">
-                <div class="mx-auto max-w-2xl lg:mx-0">
-                    <h1 class="mt-24 text-4xl font-bold tracking-tight text-gray-900 sm:mt-10 sm:text-6xl">{{ $weeklyTheme['title'] }}</h1>
-                    <p class="mt-6 text-lg leading-8 text-gray-600">{{ $weeklyTheme['description'] }}</p>
-                    <div class="mt-10 flex items-center gap-x-6">
-                        <a href="{{ route('products.index') }}" class="rounded-md bg-orange-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500">Browse Products</a>
+    <div class="relative mt-5 mb-10">
+            <div class="mx-auto w-full lg:grid lg:grid-cols-2 overflow-hidden rounded-2xl border border-gray-200 lg:w-[90%] shadow-2xl shadow-gray-100">
+                <div class="pl-16 pr-10 pb-24 pt-20 sm:pb-32 lg:col-span-1 bg-black text-white">
+                    <div class="mx-auto max-w-2xl lg:mx-0">
+                        <!-- Dynamic Theme Title with Rotation -->
+                        <div class="mt-24 sm:mt-10">
+                            <h1 id="rotating-title" class="text-3xl font-semibold tracking-tight text-gray-50 sm:text-6xl">
+                                {{ $weeklyTheme['title'] ?? 'Living That Spiritual Life – Awakening Your Spirit' }}
+                            </h1>
+                        </div>
+                        
+                        <p class="mt-6 text-lg leading-8 text-gray-100">{{ $weeklyTheme['description'] ?? 'Welcome to a space where transformation happens! Each week, we dive into topics that inspire spiritual awakening, deepen Kingdom relationships, and guide you on your journey toward spiritual growth. Ready to live with purpose? Start here.' }}</p>
+                        <div class="mt-10 flex items-center gap-x-6">
+                            <a href="{{ route('products.index') }}" class="rounded-md bg-orange-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500">
+                                {{ $siteSettings->cta_button_text ?? 'Browse Products' }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative lg:col-span-1">
+                    <div id="hero-image-container" class="aspect-[3/2] w-full bg-gray-50 lg:absolute lg:inset-0 lg:aspect-auto lg:h-full overflow-hidden">
+                        @if($siteSettings->hero_image_1 || $siteSettings->hero_image_2 || $siteSettings->hero_image_3)
+                            @if($siteSettings->hero_image_1)
+                                <img id="hero-image-1" class="w-full h-full object-cover transition-opacity duration-1000" src="{{ $siteSettings->hero_image_1 }}" alt="Hero Image 1" style="display: block;">
+                            @endif
+                            @if($siteSettings->hero_image_2)
+                                <img id="hero-image-2" class="w-full h-full object-cover transition-opacity duration-1000" src="{{ $siteSettings->hero_image_2 }}" alt="Hero Image 2" style="display: none;">
+                            @endif
+                            @if($siteSettings->hero_image_3)
+                                <img id="hero-image-3" class="w-full h-full object-cover transition-opacity duration-1000" src="{{ $siteSettings->hero_image_3 }}" alt="Hero Image 3" style="display: none;">
+                            @endif
+                        @else
+                            <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1498758536662-35b82cd15e29?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2102&q=80" alt="Default Hero Image">
+                        @endif
                     </div>
                 </div>
             </div>
-            <div class="relative lg:col-span-5 lg:-mr-8 xl:absolute xl:inset-0 xl:left-1/2 xl:mr-0">
-                <img class="aspect-[3/2] w-full bg-gray-50 object-cover lg:absolute lg:inset-0 lg:aspect-auto lg:h-full" src="https://images.unsplash.com/photo-1498758536662-35b82cd15e29?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2102&q=80" alt="">
-            </div>
-        </div>
     </div>
 
     <!-- Categories -->

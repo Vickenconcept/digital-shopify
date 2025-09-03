@@ -1,51 +1,68 @@
 <div class="group relative" x-data="{
     inWishlist: false,
+    productId: {{ $product->id }},
+    productTitle: '{{ addslashes($product->title) }}',
+    productPrice: {{ $product->price }},
+    productThumbnail: '{{ addslashes($product->thumbnail_path) }}',
     init() {
         // Check if product is in wishlist
-        const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-        this.inWishlist = wishlist.includes({{ $product->id }});
+        try {
+            const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+            this.inWishlist = wishlist.includes(this.productId);
+        } catch (e) {
+            console.error('Error parsing wishlist:', e);
+            this.inWishlist = false;
+        }
     },
     toggleWishlist(e) {
         // Prevent the click from bubbling up to the parent link
         e.preventDefault();
         e.stopPropagation();
 
-        let wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-        if (this.inWishlist) {
-            wishlist = wishlist.filter(id => id !== {{ $product->id }});
-        } else {
-            wishlist.push({{ $product->id }});
-        }
-        localStorage.setItem('wishlist', JSON.stringify(wishlist));
-        this.inWishlist = !this.inWishlist;
+        try {
+            let wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+            if (this.inWishlist) {
+                wishlist = wishlist.filter(id => id !== this.productId);
+            } else {
+                wishlist.push(this.productId);
+            }
+            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+            this.inWishlist = !this.inWishlist;
 
-        // Dispatch event for wishlist update
-        window.dispatchEvent(new CustomEvent('wishlist-updated'));
+            // Dispatch event for wishlist update
+            window.dispatchEvent(new CustomEvent('wishlist-updated'));
+        } catch (e) {
+            console.error('Error updating wishlist:', e);
+        }
     },
     addToCart(e) {
         // Prevent the click from bubbling up to the parent link
         e.preventDefault();
         e.stopPropagation();
 
-        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-        const existingItem = cart.find(item => item.id === {{ $product->id }});
+        try {
+            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const existingItem = cart.find(item => item.id === this.productId);
 
-        if (existingItem) {
-            existingItem.quantity += 1;
-        } else {
-            cart.push({
-                id: {{ $product->id }},
-                title: '{{ $product->title }}',
-                price: {{ $product->price }},
-                thumbnail: '{{ $product->thumbnail_path }}',
-                quantity: 1
-            });
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: this.productId,
+                    title: this.productTitle,
+                    price: this.productPrice,
+                    thumbnail: this.productThumbnail,
+                    quantity: 1
+                });
+            }
+
+            localStorage.setItem('cart', JSON.stringify(cart));
+
+            // Dispatch event for cart update
+            window.dispatchEvent(new CustomEvent('cart-updated'));
+        } catch (e) {
+            console.error('Error updating cart:', e);
         }
-
-        localStorage.setItem('cart', JSON.stringify(cart));
-
-        // Dispatch event for cart update
-        window.dispatchEvent(new CustomEvent('cart-updated'));
     }
 }">
     <div class="relative h-64 w-full overflow-hidden rounded-lg bg-gray-200">

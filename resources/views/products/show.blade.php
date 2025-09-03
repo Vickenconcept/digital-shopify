@@ -1,44 +1,61 @@
 <x-main-layout>
     <div class="bg-white" x-data="{
         inWishlist: false,
+        productId: {{ $product->id }},
+        productTitle: '{{ addslashes($product->title) }}',
+        productPrice: {{ $product->price }},
+        productThumbnail: '{{ addslashes($product->thumbnail_path) }}',
         init() {
             // Check if product is in wishlist
-            const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-            this.inWishlist = wishlist.includes({{ $product->id }});
+            try {
+                const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+                this.inWishlist = wishlist.includes(this.productId);
+            } catch (e) {
+                console.error('Error parsing wishlist:', e);
+                this.inWishlist = false;
+            }
         },
         toggleWishlist() {
-            let wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-            if (this.inWishlist) {
-                wishlist = wishlist.filter(id => id !== {{ $product->id }});
-            } else {
-                wishlist.push({{ $product->id }});
+            try {
+                let wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+                if (this.inWishlist) {
+                    wishlist = wishlist.filter(id => id !== this.productId);
+                } else {
+                    wishlist.push(this.productId);
+                }
+                localStorage.setItem('wishlist', JSON.stringify(wishlist));
+                this.inWishlist = !this.inWishlist;
+        
+                // Dispatch event for wishlist update
+                window.dispatchEvent(new CustomEvent('wishlist-updated'));
+            } catch (e) {
+                console.error('Error updating wishlist:', e);
             }
-            localStorage.setItem('wishlist', JSON.stringify(wishlist));
-            this.inWishlist = !this.inWishlist;
-    
-            // Dispatch event for wishlist update
-            window.dispatchEvent(new CustomEvent('wishlist-updated'));
         },
         addToCart() {
-            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-            const existingItem = cart.find(item => item.id === {{ $product->id }});
-    
-            if (existingItem) {
-                existingItem.quantity += 1;
-            } else {
-                cart.push({
-                    id: {{ $product->id }},
-                    title: '{{ $product->title }}',
-                    price: {{ $product->price }},
-                    thumbnail: '{{ $product->thumbnail_path }}',
-                    quantity: 1
-                });
+            try {
+                let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+                const existingItem = cart.find(item => item.id === this.productId);
+        
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cart.push({
+                        id: this.productId,
+                        title: this.productTitle,
+                        price: this.productPrice,
+                        thumbnail: this.productThumbnail,
+                        quantity: 1
+                    });
+                }
+        
+                localStorage.setItem('cart', JSON.stringify(cart));
+        
+                // Dispatch event for cart update
+                window.dispatchEvent(new CustomEvent('cart-updated'));
+            } catch (e) {
+                console.error('Error updating cart:', e);
             }
-    
-            localStorage.setItem('cart', JSON.stringify(cart));
-    
-            // Dispatch event for cart update
-            window.dispatchEvent(new CustomEvent('cart-updated'));
         }
     }">
         <div
@@ -147,7 +164,7 @@
 
                 @if (!$product->is_free && $product->preview_path)
                     <div class="mt-6">
-                        <a href="{{ $product->preview_path }}"
+                        <a href="{{ $product->preview_path }}" target="_blank"
                             class="text-base font-medium text-indigo-600 hover:text-indigo-500">
                             <svg class="h-5 w-5 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

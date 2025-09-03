@@ -136,8 +136,8 @@
             </div>
 
             <!-- Pagination -->
-            <div class="mt-6">
-                {{ $products->links() }}
+            <div class="mt-8">
+                <x-custom-pagination :paginator="$products" />
             </div>
         </div>
 

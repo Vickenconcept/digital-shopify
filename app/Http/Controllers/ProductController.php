@@ -32,7 +32,20 @@ class ProductController extends Controller
 
         // Filter by type
         if ($request->has('type')) {
-            $query->where('file_type', $request->type);
+            $type = $request->type;
+            // Map footer type values to actual file types
+            $typeMapping = [
+                'audio' => ['mp3', 'wav', 'flac', 'aac', 'ogg', 'wma', 'm4a'],
+                'video' => ['mp4', 'avi', 'mov', 'wmv', 'flv', 'webm', 'mkv', '3gp'],
+                'ebook' => ['pdf', 'epub', 'mobi', 'txt', 'doc', 'docx']
+            ];
+            
+            if (isset($typeMapping[$type])) {
+                $query->whereIn('file_type', $typeMapping[$type]);
+            } else {
+                // Fallback to exact match for other types
+                $query->where('file_type', $type);
+            }
         }
 
         // Sort products
@@ -52,7 +65,7 @@ class ProductController extends Controller
                 break;
         }
 
-        $products = $query->paginate(12)->withQueryString();
+        $products = $query->paginate(10)->withQueryString();
         $categories = Category::where('is_active', true)->get();
 
         return view('products.index', compact('products', 'categories'));

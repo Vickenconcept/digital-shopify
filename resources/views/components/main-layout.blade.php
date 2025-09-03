@@ -11,6 +11,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -18,7 +19,7 @@
     <script src="https://js.stripe.com/v3/"></script>
 </head>
 
-<body class="h-full font-sans antialiased bg-white" x-data="{ mobileMenuOpen: false }">
+<body class="h-full antialiased bg-gray-50 !font-['Poppins']" x-data="{ mobileMenuOpen: false }">
     <!-- Header -->
     <header>
         <!-- Top bar -->
@@ -26,12 +27,12 @@
             <div class="container mx-auto px-6">
                 <div class="flex justify-between items-center text-sm">
                     <div class="flex items-center space-x-4">
-                        <a href="#" class="hover:text-orange-500">Help Center</a>
-                        <a href="#" class="hover:text-orange-500">Contact Us</a>
+                        <a href="{{ route('contact') }}" class="hover:text-orange-500">Help Center</a>
+                        <a href="{{ route('contact') }}" class="hover:text-orange-500">Contact Us</a>
                     </div>
                     <div class="flex items-center space-x-4">
                         @auth
-                            <a href="{{ url('/dashboard') }}" class="hover:text-orange-500">My Account</a>
+                            <a href="{{ route('home') }}" class="hover:text-orange-500">My Account</a>
                             <form method="POST" action="{{ route('auth.logout') }}" class="inline">
                                 @csrf
                                 <button type="submit" class="hover:text-orange-500">
@@ -50,7 +51,7 @@
         </div>
 
         <!-- Main header -->
-        <nav class="bg-white shadow">
+        <nav class="bg-white shadow-xl shadow-gray-100">
             <div class="container mx-auto px-6 py-4">
                 <div class="flex justify-between items-center">
                     <div class="flex items-center">
@@ -287,8 +288,8 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-black text-white mt-auto">
-        <div class="container mx-auto px-6 py-12">
+    <footer class="bg-gradient-to-br from-gray-900 to-black text-white mt-auto">
+        <div class="container mx-auto px-6 pt-16 pb-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
                     <h3 class="text-lg font-semibold mb-4">About Us</h3>
@@ -301,42 +302,97 @@
                 <div>
                     <h3 class="text-lg font-semibold mb-4">Resources</h3>
                     <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-300 hover:text-orange-500">Audio Messages</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-orange-500">E-Books</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-orange-500">Video Content</a></li>
+                        <li><a href="{{ route('products.index', ['type' => 'audio']) }}" class="text-gray-300 hover:text-orange-500 transition-colors duration-200">Audio Messages</a></li>
+                        <li><a href="{{ route('products.index', ['type' => 'ebook']) }}" class="text-gray-300 hover:text-orange-500 transition-colors duration-200">E-Books</a></li>
+                        <li><a href="{{ route('products.index', ['type' => 'video']) }}" class="text-gray-300 hover:text-orange-500 transition-colors duration-200">Video Content</a></li>
+                        <li><a href="{{ route('products.index') }}" class="text-gray-300 hover:text-orange-500 transition-colors duration-200">All Resources</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h3 class="text-lg font-semibold mb-4">Help</h3>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
                     <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-300 hover:text-orange-500">FAQs</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-orange-500">Contact Support</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-orange-500">Terms of Service</a></li>
+                        <li><a href="{{ route('blog.index') }}" class="text-gray-300 hover:text-orange-500 transition-colors duration-200">Blog</a></li>
+                        <li><a href="{{ route('contact') }}" class="text-gray-300 hover:text-orange-500 transition-colors duration-200">Contact</a></li>
+                        <li><a href="{{ route('about') }}" class="text-gray-300 hover:text-orange-500 transition-colors duration-200">About</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-orange-500 transition-colors duration-200">Privacy Policy</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h3 class="text-lg font-semibold mb-4">Connect With Us</h3>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-gray-300 hover:text-orange-500">
-                            <span class="sr-only">Facebook</span>
-                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                                <path fill-rule="evenodd"
-                                    d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </a>
-                        <a href="#" class="text-gray-300 hover:text-orange-500">
-                            <span class="sr-only">YouTube</span>
-                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                                <path fill-rule="evenodd"
-                                    d="M19.812 5.418c.861.23 1.538.907 1.768 1.768C21.998 8.746 22 12 22 12s0 3.255-.418 4.814a2.504 2.504 0 0 1-1.768 1.768c-1.56.419-7.814.419-7.814.419s-6.255 0-7.814-.419a2.505 2.505 0 0 1-1.768-1.768C2 15.255 2 12 2 12s0-3.255.417-4.814a2.507 2.507 0 0 1 1.768-1.768C5.744 5 11.998 5 11.998 5s6.255 0 7.814.418ZM15.194 12 10 15V9l5.194 3Z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </a>
+                   
+
+                    <!-- Social Media Links -->
+                    <div class="flex space-x-3">
+                        @if(isset($siteSettings) && $siteSettings->facebook_link)
+                            <a href="{{ $siteSettings->facebook_link }}" target="_blank" rel="noopener noreferrer" 
+                                class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center text-gray-300 hover:text-orange-400 hover:bg-gray-700 transition-colors duration-200">
+                                <span class="sr-only">Facebook</span>
+                                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd"
+                                        d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </a>
+                        @endif
+                        
+                        @if(isset($siteSettings) && $siteSettings->twitter_link)
+                            <a href="{{ $siteSettings->twitter_link }}" target="_blank" rel="noopener noreferrer" 
+                                class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center text-gray-300 hover:text-orange-400 hover:bg-gray-700 transition-colors duration-200">
+                                <span class="sr-only">Twitter</span>
+                                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                                </svg>
+                            </a>
+                        @endif
+                        
+                        @if(isset($siteSettings) && $siteSettings->instagram_link)
+                            <a href="{{ $siteSettings->instagram_link }}" target="_blank" rel="noopener noreferrer" 
+                                class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center text-gray-300 hover:text-orange-400 hover:bg-gray-700 transition-colors duration-200">
+                                <span class="sr-only">Instagram</span>
+                                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd"
+                                        d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987s11.987-5.367 11.987-11.987C24.004 5.367 18.637.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.323-1.297C4.198 14.895 3.708 13.744 3.708 12.447s.49-2.448 1.297-3.323c.875-.807 2.026-1.297 3.323-1.297s2.448.49 3.323 1.297c.807.875 1.297 2.026 1.297 3.323s-.49 2.448-1.297 3.323c-.875.807-2.026 1.297-3.323 1.297zm7.83-9.281H7.721c-.49 0-.875.385-.875.875v8.958c0 .49.385.875.875.875h8.558c.49 0 .875-.385.875-.875V8.582c0-.49-.385-.875-.875-.875z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </a>
+                        @endif
+                        
+                        @if(isset($siteSettings) && $siteSettings->youtube_link)
+                            <a href="{{ $siteSettings->youtube_link }}" target="_blank" rel="noopener noreferrer" 
+                                class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center text-gray-300 hover:text-orange-400 hover:bg-gray-700 transition-colors duration-200">
+                                <span class="sr-only">YouTube</span>
+                                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd"
+                                        d="M19.812 5.418c.861.23 1.538.907 1.768 1.768C21.998 8.746 22 12 22 12s0 3.255-.418 4.814a2.504 2.504 0 0 1-1.768 1.768c-1.56.419-7.814.419-7.814.419s-6.255 0-7.814-.419a2.505 2.505 0 0 1-1.768-1.768C2 15.255 2 12 2 12s0-3.255.417-4.814a2.507 2.507 0 0 1 1.768-1.768C5.744 5 11.998 5 11.998 5s6.255 0 7.814.418ZM15.194 12 10 15V9l5.194 3Z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </a>
+                        @endif
+                        
+                        @if(isset($siteSettings) && $siteSettings->tiktok_link)
+                            <a href="{{ $siteSettings->tiktok_link }}" target="_blank" rel="noopener noreferrer" 
+                                class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center text-gray-300 hover:text-orange-400 hover:bg-gray-700 transition-colors duration-200">
+                                <span class="sr-only">TikTok</span>
+                                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                                </svg>
+                            </a>
+                        @endif
                     </div>
-                    <p class="mt-4 text-sm text-gray-300">
-                        © {{ date('Y') }} Pastor Charlene Boyd.<br>All rights reserved.
-                    </p>
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="border-t border-gray-800 pt-6 mt-6">
+                <div class="">
+                    <div class="text-center">
+                        <p class="text-gray-300 text-sm">
+                            © {{ date('Y') }} Pastor Charlene Boyd. All rights reserved.
+                        </p>
+                        <p class="text-gray-400 text-xs mt-1">
+                            Living That Spiritual Life – Awakening Your Spirit
+                        </p>
+                    </div>
+                   
                 </div>
             </div>
         </div>
@@ -488,6 +544,84 @@
                 window.stripe = Stripe(stripeKey);
             } catch (error) {
                 console.error('Stripe initialization failed:', error);
+            }
+        });
+    </script>
+
+    <!-- Simple Theme Rotator -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dayMessages = @json($dayMessages ?? []);
+            const currentDay = '{{ $currentDay ?? 'monday' }}';
+            const themeTitle = '{{ $weeklyTheme['title'] ?? '' }}';
+            
+            console.log('Simple Theme Rotator initialized');
+            console.log('Current day:', currentDay);
+            console.log('Day message:', dayMessages[currentDay]);
+            
+            // Check if we have a message for the current day
+            if (dayMessages[currentDay] && dayMessages[currentDay].trim() !== '') {
+                const messages = [themeTitle, dayMessages[currentDay]];
+                let currentIndex = 0;
+                
+                console.log('Starting rotation with messages:', messages);
+                
+                // Update the title immediately
+                const titleElement = document.getElementById('rotating-title');
+                if (titleElement) {
+                    titleElement.textContent = messages[currentIndex];
+                }
+                
+                // Rotate every 10 seconds
+                setInterval(() => {
+                    currentIndex = (currentIndex + 1) % messages.length;
+                    if (titleElement) {
+                        titleElement.textContent = messages[currentIndex];
+                        console.log('Rotated to:', messages[currentIndex]);
+                    }
+                }, 10000);
+            } else {
+                console.log('No message for', currentDay, '- showing static title');
+            }
+        });
+    </script>
+
+    <!-- Hero Image Rotator -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const heroImages = [];
+            
+            // Collect available hero images
+            for (let i = 1; i <= 3; i++) {
+                const img = document.getElementById(`hero-image-${i}`);
+                if (img && img.src) {
+                    heroImages.push(img);
+                }
+            }
+            
+            console.log('Hero Image Rotator initialized with', heroImages.length, 'images');
+            
+            // Only rotate if we have more than one image
+            if (heroImages.length > 1) {
+                let currentIndex = 0;
+                
+                // Rotate every 10 seconds
+                setInterval(() => {
+                    // Hide current image
+                    heroImages[currentIndex].style.display = 'none';
+                    
+                    // Move to next image
+                    currentIndex = (currentIndex + 1) % heroImages.length;
+                    
+                    // Show next image
+                    heroImages[currentIndex].style.display = 'block';
+                    
+                    console.log('Rotated to hero image', currentIndex + 1);
+                }, 10000);
+            } else if (heroImages.length === 1) {
+                console.log('Only one hero image available, no rotation needed');
+            } else {
+                console.log('No hero images available, using default image');
             }
         });
     </script>

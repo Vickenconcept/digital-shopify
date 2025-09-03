@@ -4,11 +4,19 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Services\FileUploadService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
+    protected FileUploadService $fileUploadService;
+
+    public function __construct(FileUploadService $fileUploadService)
+    {
+        $this->fileUploadService = $fileUploadService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -68,14 +76,14 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:categories',
             'description' => 'nullable|string',
-            'image_path' => 'nullable|image|max:2048',
+            'image_path' => 'nullable|image|max:2048|mimes:png,jpg,jpeg,gif,webp,svg,psd',
             'is_active' => 'boolean',
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);
 
         if ($request->hasFile('image_path')) {
-            $validated['image_path'] = $request->file('image_path')->store('categories', 'public');
+            $validated['image_path'] = $this->fileUploadService->uploadFile($request->file('image_path'), 'categories');
         }
 
         Category::create($validated);
@@ -108,14 +116,14 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
             'description' => 'nullable|string',
-            'image_path' => 'nullable|image|max:2048',
+            'image_path' => 'nullable|image|max:2048|mimes:png,jpg,jpeg,gif,webp,svg,psd',
             'is_active' => 'boolean',
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);
 
         if ($request->hasFile('image_path')) {
-            $validated['image_path'] = $request->file('image_path')->store('categories', 'public');
+            $validated['image_path'] = $this->fileUploadService->uploadFile($request->file('image_path'), 'categories');
         }
 
         $category->update($validated);

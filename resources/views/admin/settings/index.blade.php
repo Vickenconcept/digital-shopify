@@ -77,43 +77,16 @@
                     <p class="mt-1 text-sm text-gray-600">Configure your site's main call-to-action section.</p>
                 </div>
                 <div class="p-6 space-y-6">
-                    <!-- CTA Title -->
-                    <div>
-                        <label for="cta_title" class="block text-sm font-medium text-gray-700 mb-2">
-                            CTA Title
-                        </label>
-                        <input type="text" name="cta_title" id="cta_title"
-                               value="{{ old('cta_title', $settings->cta_title) }}"
-                               class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors">
-                    </div>
-
-                    <!-- CTA Description -->
-                    <div>
-                        <label for="cta_description" class="block text-sm font-medium text-gray-700 mb-2">
-                            CTA Description
-                        </label>
-                        <textarea name="cta_description" id="cta_description" rows="3"
-                                  class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors resize-none">{{ old('cta_description', $settings->cta_description) }}</textarea>
-                    </div>
-
-                    <!-- CTA Button -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- CTA Button Text -->
                         <div>
                             <label for="cta_button_text" class="block text-sm font-medium text-gray-700 mb-2">
                                 Button Text
                             </label>
                             <input type="text" name="cta_button_text" id="cta_button_text"
                                    value="{{ old('cta_button_text', $settings->cta_button_text) }}"
+                               placeholder="e.g., Browse Products, Get Started, Listen Now"
                                    class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors">
-                        </div>
-                        <div>
-                            <label for="cta_button_link" class="block text-sm font-medium text-gray-700 mb-2">
-                                Button Link
-                            </label>
-                            <input type="text" name="cta_button_link" id="cta_button_link"
-                                   value="{{ old('cta_button_link', $settings->cta_button_link) }}"
-                                   class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors">
-                        </div>
+                        <p class="mt-2 text-sm text-gray-500">The text that will appear on the main button in the hero section.</p>
                     </div>
                 </div>
             </div>
@@ -152,8 +125,8 @@
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             @for($i = 1; $i <= 3; $i++)
                                 <div x-data="{ 
-                                    imagePreview: '{{ $settings->{"hero_image_$i"} ? asset("storage/" . $settings->{"hero_image_$i"}) : null }}',
-                                    currentImage: '{{ $settings->{"hero_image_$i"} ? asset("storage/" . $settings->{"hero_image_$i"}) : null }}',
+                                    imagePreview: '{{ $settings->{"hero_image_$i"} ?: null }}',
+                                    currentImage: '{{ $settings->{"hero_image_$i"} ?: null }}',
                                     handleFileChange(event) {
                                         const file = event.target.files[0];
                                         if (file) {
@@ -228,8 +201,8 @@
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             @for($i = 1; $i <= 3; $i++)
                                 <div x-data="{ 
-                                    imagePreview: '{{ $settings->{"banner_image_$i"} ? asset("storage/" . $settings->{"banner_image_$i"}) : null }}',
-                                    currentImage: '{{ $settings->{"banner_image_$i"} ? asset("storage/" . $settings->{"banner_image_$i"}) : null }}',
+                                    imagePreview: '{{ $settings->{"banner_image_$i"} ?: null }}',
+                                    currentImage: '{{ $settings->{"banner_image_$i"} ?: null }}',
                                     handleFileChange(event) {
                                         const file = event.target.files[0];
                                         if (file) {

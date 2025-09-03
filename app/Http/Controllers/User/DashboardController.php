@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class DashboardController extends Controller
 {
@@ -114,13 +112,14 @@ class DashboardController extends Controller
         }
 
         $product = \App\Models\DigitalProduct::findOrFail($productId);
-        $path = $product->file_path;
-
-        if (!Storage::disk('digital_content')->exists($path)) {
+        
+        // Check if file path exists (Cloudinary URL)
+        if (!$product->file_path) {
             abort(404, 'File not found.');
         }
 
-        return Storage::disk('digital_content')->download($path, $product->title . '.' . pathinfo($path, PATHINFO_EXTENSION));
+        // Redirect to Cloudinary URL for download
+        return redirect($product->file_path);
     }
 
     public function stream(Request $request, $productId)
@@ -138,26 +137,13 @@ class DashboardController extends Controller
         }
 
         $product = \App\Models\DigitalProduct::findOrFail($productId);
-        $path = $product->file_path;
-
-        if (!Storage::disk('digital_content')->exists($path)) {
+        
+        // Check if file path exists (Cloudinary URL)
+        if (!$product->file_path) {
             abort(404, 'File not found.');
         }
 
-        $mimeType = Storage::disk('digital_content')->mimeType($path);
-        $size = Storage::disk('digital_content')->size($path);
-        $stream = Storage::disk('digital_content')->readStream($path);
-
-        return response()->stream(
-            function () use ($stream) {
-                fpassthru($stream);
-            },
-            200,
-            [
-                'Content-Type' => $mimeType,
-                'Content-Length' => $size,
-                'Accept-Ranges' => 'bytes',
-            ]
-        );
+        // Redirect to Cloudinary URL for streaming
+        return redirect($product->file_path);
     }
 }

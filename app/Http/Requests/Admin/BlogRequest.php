@@ -25,7 +25,7 @@ class BlogRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'excerpt' => ['nullable', 'string'],
             'content' => ['required', 'string'],
-            'featured_image' => ['nullable', 'image', 'max:2048'], // 2MB max
+            'featured_image' => ['nullable', 'image', 'max:2048', 'mimes:png,jpg,jpeg,gif,webp,svg,psd'], // 2MB max
             'youtube_url' => ['nullable', 'url', 'max:255'],
             'is_featured' => ['boolean'],
             'is_published' => ['boolean'],

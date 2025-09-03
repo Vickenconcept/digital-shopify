@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\DigitalProduct;
+use App\Models\SiteSetting;
 use Illuminate\Http\Request;
 
 class WelcomeController extends Controller
@@ -29,12 +30,6 @@ class WelcomeController extends Controller
             ->withCount('digitalProducts')
             ->get();
 
-        // Get weekly theme
-        $weeklyTheme = [
-            'title' => 'Living That Spiritual Life – Awakening Your Spirit',
-            'description' => 'Welcome to a space where transformation happens! Each week, we dive into topics that inspire spiritual awakening, deepen Kingdom relationships, and guide you on your journey toward spiritual growth. Ready to live with purpose? Start here.',
-        ];
-
-        return view('home', compact('featuredProducts', 'latestAudios', 'categories', 'weeklyTheme'));
+        return view('home', compact('featuredProducts', 'latestAudios', 'categories'));
     }
 }

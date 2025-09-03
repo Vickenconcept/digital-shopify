@@ -27,9 +27,7 @@ return new class extends Migration
             
             // Call to Action
             $table->string('cta_title')->nullable();
-            $table->text('cta_description')->nullable();
             $table->string('cta_button_text')->nullable();
-            $table->string('cta_button_link')->nullable();
             
             // Social Media Links
             $table->string('facebook_link')->nullable();

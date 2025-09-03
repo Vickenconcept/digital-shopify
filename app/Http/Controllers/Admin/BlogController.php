@@ -5,11 +5,19 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\BlogRequest;
 use App\Models\Blog;
+use App\Services\FileUploadService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class BlogController extends Controller
 {
+    protected FileUploadService $fileUploadService;
+
+    public function __construct(FileUploadService $fileUploadService)
+    {
+        $this->fileUploadService = $fileUploadService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -71,8 +79,7 @@ class BlogController extends Controller
             $data['published_at'] = $data['is_published'] ? now() : null;
 
             if ($request->hasFile('featured_image')) {
-                $path = $request->file('featured_image')->store('blog/images', 'public');
-                $data['featured_image'] = $path;
+                $data['featured_image'] = $this->fileUploadService->uploadFile($request->file('featured_image'), 'blog/images');
             }
 
             Blog::create($data);
@@ -114,8 +121,7 @@ class BlogController extends Controller
             $data['published_at'] = $data['is_published'] ? ($blog->published_at ?? now()) : null;
 
             if ($request->hasFile('featured_image')) {
-                $path = $request->file('featured_image')->store('blog/images', 'public');
-                $data['featured_image'] = $path;
+                $data['featured_image'] = $this->fileUploadService->uploadFile($request->file('featured_image'), 'blog/images');
             }
 
             $blog->update($data);
