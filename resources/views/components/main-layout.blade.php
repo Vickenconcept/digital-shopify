@@ -6,7 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Pastor Charlene Boyd') }}</title>
+    <!-- Laravel SEO Package -->
+    <x-seo::meta />
+    
+    <!-- Default SEO for pages that don't set their own -->
+    @seo([
+        'title' => 'Your Journey Voices | Audiobooks & Ebooks – Stories That Travel With You',
+        'description' => 'Discover Christian, children\'s, inspirational, and commuter-friendly audiobooks and ebooks. Your Journey Voices – stories that inspire and travel with you.',
+        'image' => asset('images/your-journey-voices-og.jpg'),
+        'site_name' => 'Your Journey Voices',
+        'favicon' => asset('favicon.ico'),
+    ])
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -57,7 +67,7 @@
                     <div class="flex items-center">
                        
                         <a href="{{ url('/') }}" class="text-2xl font-bold text-orange-500">
-                            Pastor Charlene Boyd
+                            Your Journey Voices
                         </a>
 
                         <div class="hidden md:flex items-center ml-10 space-x-8">
@@ -69,10 +79,25 @@
                                 class="text-base font-medium text-gray-700 hover:text-orange-500">
                                 Blog
                             </a>
-                            <a href="{{ route('products.index') }}"
-                                class="text-base font-medium text-gray-700 hover:text-orange-500">
-                                Resources
-                            </a>
+                            <div class="relative group">
+                                <a href="{{ route('products.index') }}"
+                                    class="text-base font-medium text-gray-700 hover:text-orange-500 flex items-center">
+                                    Resources
+                                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </a>
+                                <div class="absolute top-full left-0 mt-1 w-64 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                    <div class="py-2">
+                                        <a href="{{ route('seo.christian-audiobooks') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600">Christian Audiobooks</a>
+                                        <a href="{{ route('seo.children-stories') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600">Children's Stories</a>
+                                        <a href="{{ route('seo.commuter-audiobooks') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600">Commuter Audiobooks</a>
+                                        <a href="{{ route('seo.inspiration-health') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600">Inspiration & Health</a>
+                                        <hr class="my-1">
+                                        <a href="{{ route('products.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600">All Resources</a>
+                                    </div>
+                                </div>
+                            </div>
                             <a href="{{ route('contact') }}"
                                 class="text-base font-medium text-gray-700 hover:text-orange-500">
                                 Contact
@@ -265,9 +290,26 @@
                     <a href="{{ route('blog.index') }}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-orange-500 hover:bg-gray-50 rounded-md">
                         Blog
                     </a>
-                    <a href="{{ route('products.index') }}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-orange-500 hover:bg-gray-50 rounded-md">
-                        Resources
-                    </a>
+                    <div class="px-3 py-2">
+                        <div class="text-base font-medium text-gray-700 mb-2">Resources</div>
+                        <div class="ml-4 space-y-1">
+                            <a href="{{ route('seo.christian-audiobooks') }}" class="block px-3 py-2 text-sm text-gray-600 hover:text-orange-500 hover:bg-gray-50 rounded-md">
+                                Christian Audiobooks
+                            </a>
+                            <a href="{{ route('seo.children-stories') }}" class="block px-3 py-2 text-sm text-gray-600 hover:text-orange-500 hover:bg-gray-50 rounded-md">
+                                Children's Stories
+                            </a>
+                            <a href="{{ route('seo.commuter-audiobooks') }}" class="block px-3 py-2 text-sm text-gray-600 hover:text-orange-500 hover:bg-gray-50 rounded-md">
+                                Commuter Audiobooks
+                            </a>
+                            <a href="{{ route('seo.inspiration-health') }}" class="block px-3 py-2 text-sm text-gray-600 hover:text-orange-500 hover:bg-gray-50 rounded-md">
+                                Inspiration & Health
+                            </a>
+                            <a href="{{ route('products.index') }}" class="block px-3 py-2 text-sm text-gray-600 hover:text-orange-500 hover:bg-gray-50 rounded-md">
+                                All Resources
+                            </a>
+                        </div>
+                    </div>
                     <a href="{{ route('contact') }}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-orange-500 hover:bg-gray-50 rounded-md">
                         Contact
                     </a>
@@ -386,10 +428,10 @@
                 <div class="">
                     <div class="text-center">
                         <p class="text-gray-300 text-sm">
-                            © {{ date('Y') }} Pastor Charlene Boyd. All rights reserved.
+                            © {{ date('Y') }} Your Journey Voices. All rights reserved.
                         </p>
                         <p class="text-gray-400 text-xs mt-1">
-                            Living That Spiritual Life – Awakening Your Spirit
+                            Stories That Travel With You
                         </p>
                     </div>
                    
@@ -404,7 +446,7 @@
     <div x-data="cartManager()" @keydown.window.escape="open = false">
         <!-- Cart button -->
         <button @click="open = true" type="button"
-            class="fixed z-50 bottom-4 right-4 rounded-full bg-orange-500 p-4 text-white shadow-sm hover:bg-orange-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500">
+            class="fixed z-50 bottom-4 right-4 rounded-full bg-orange-500 p-4 text-white shadow-sm hover:bg-orange-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500">
             <span
                 class="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-black text-white text-xs flex items-center justify-center"
                 x-text="cart.reduce((sum, item) => sum + item.quantity, 0)"></span>
@@ -434,8 +476,10 @@
                             <div class="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
                                 <div class="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
                                     <div class="flex items-start justify-between">
-                                        <h2 class="text-lg font-medium text-gray-900" id="slide-over-title">Shopping
-                                            cart</h2>
+                                        <div>
+                                            <h2 class="text-lg font-medium text-gray-900" id="slide-over-title">Shopping Cart</h2>
+                                            <p class="mt-1 text-sm text-gray-500" x-show="cart.length > 0" x-text="cart.length + ' item' + (cart.length !== 1 ? 's' : '') + ' in your cart'"></p>
+                                        </div>
                                         <div class="ml-3 flex h-7 items-center">
                                             <button @click="open = false" type="button"
                                                 class="relative -m-2 p-2 text-gray-400 hover:text-gray-500">
@@ -451,7 +495,22 @@
                                     </div>
 
                                     <div class="mt-8">
-                                        <div class="flow-root">
+                                        <!-- Empty Cart State -->
+                                        <div x-show="cart.length === 0" class="text-center py-12">
+                                            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path>
+                                            </svg>
+                                            <h3 class="mt-2 text-sm font-medium text-gray-900">Your cart is empty</h3>
+                                            <p class="mt-1 text-sm text-gray-500">Start adding some items to your cart.</p>
+                                            <div class="mt-6">
+                                                <button @click="open = false" type="button" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">
+                                                    Continue Shopping
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Cart Items -->
+                                        <div x-show="cart.length > 0" class="flow-root">
                                             <ul role="list" class="-my-6 divide-y divide-gray-200">
                                                 <template x-for="item in cart" :key="item.id">
                                                     <li class="flex py-6">
@@ -463,25 +522,53 @@
 
                                                         <div class="ml-4 flex flex-1 flex-col">
                                                             <div>
-                                                                <div
-                                                                    class="flex justify-between text-base font-medium text-gray-900">
+                                                                <div class="flex justify-between text-base font-medium text-gray-900">
                                                                     <h3 x-text="item.title"></h3>
-                                                                    <p class="ml-4"
-                                                                        x-text="'$' + (item.price * item.quantity).toFixed(2)">
-                                                                    </p>
+                                                                    <p class="ml-4 text-sm text-gray-500" x-text="'$' + item.price.toFixed(2) + ' each'"></p>
                                                                 </div>
                                                             </div>
                                                             <div class="flex flex-1 items-end justify-between text-sm">
-                                                                <div class="flex items-center space-x-2">
-                                                                    <button @click="updateQuantity(item.id, -1)"
-                                                                        class="text-gray-500 hover:text-gray-700">-</button>
-                                                                    <p class="text-gray-500" x-text="item.quantity">
-                                                                    </p>
-                                                                    <button @click="updateQuantity(item.id, 1)"
-                                                                        class="text-gray-500 hover:text-gray-700">+</button>
+                                                                <div class="flex items-center space-x-3">
+                                                                    <!-- Quantity Controls -->
+                                                                    <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+                                                                        <!-- Minus Button -->
+                                                                        <button @click="updateQuantity(item.id, -1)"
+                                                                            class="flex items-center justify-center w-8 h-8 bg-gray-50 hover:bg-gray-100 text-gray-600 hover:text-gray-800 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-inset"
+                                                                            :disabled="item.quantity <= 1"
+                                                                            :class="item.quantity <= 1 ? 'opacity-50 cursor-not-allowed' : ''">
+                                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                                                                            </svg>
+                                                                        </button>
+                                                                        
+                                                                        <!-- Quantity Display -->
+                                                                        <div class="flex items-center justify-center w-12 h-8 bg-white border-x border-gray-300">
+                                                                            <span class="text-sm font-medium text-gray-900" x-text="item.quantity"></span>
+                                                                        </div>
+                                                                        
+                                                                        <!-- Plus Button -->
+                                                                        <button @click="updateQuantity(item.id, 1)"
+                                                                            class="flex items-center justify-center w-8 h-8 bg-gray-50 hover:bg-gray-100 text-gray-600 hover:text-gray-800 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-inset">
+                                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                                                            </svg>
+                                                                        </button>
+                                                                    </div>
+                                                                    
+                                                                    <!-- Item Total -->
+                                                                    <div class="text-sm font-medium text-gray-900">
+                                                                        <span x-text="'$' + (item.price * item.quantity).toFixed(2)"></span>
+                                                                    </div>
                                                                 </div>
+                                                                
+                                                                <!-- Remove Button -->
                                                                 <button @click="removeItem(item.id)" type="button"
-                                                                    class="font-medium text-orange-500 hover:text-orange-600">Remove</button>
+                                                                    class="flex items-center space-x-1 px-3 py-1.5 text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1">
+                                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                                    </svg>
+                                                                    <span>Remove</span>
+                                                                </button>
                                                             </div>
                                                         </div>
                                                     </li>
@@ -491,25 +578,34 @@
                                     </div>
                                 </div>
 
-                                <div class="border-t border-gray-200 px-4 py-6 sm:px-6">
+                                <!-- Checkout Section (only show when cart has items) -->
+                                <div x-show="cart.length > 0" class="border-t border-gray-200 px-4 py-6 sm:px-6">
                                     <div class="flex justify-between text-base font-medium text-gray-900">
                                         <p>Subtotal</p>
                                         <p x-text="'$' + total.toFixed(2)"></p>
                                     </div>
-                                    <p class="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.
-                                    </p>
+                                    <p class="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
+                                    
                                     <div class="mt-6">
                                         <button @click="checkout" type="button"
-                                            class="flex w-full items-center justify-center rounded-md border border-transparent bg-orange-500 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 disabled:opacity-50"
+                                            class="flex w-full items-center justify-center rounded-md border border-transparent bg-orange-500 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 disabled:opacity-50 transition-colors duration-200"
                                             :disabled="cart.length === 0 || checkoutLoading">
-                                            <span x-text="checkoutLoading ? 'Processing...' : 'Checkout'"></span>
+                                            <svg x-show="!checkoutLoading" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                                            </svg>
+                                            <svg x-show="checkoutLoading" class="animate-spin w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                            <span x-text="checkoutLoading ? 'Processing...' : 'Proceed to Checkout'"></span>
                                         </button>
                                     </div>
-                                    <div class="mt-6 flex justify-center text-center text-sm text-gray-500">
+                                    
+                                    <div class="mt-4 flex justify-center text-center text-sm text-gray-500">
                                         <p>
                                             or
                                             <button @click="open = false" type="button"
-                                                class="font-medium text-orange-500 hover:text-orange-600">
+                                                class="font-medium text-orange-500 hover:text-orange-600 transition-colors duration-200">
                                                 Continue Shopping
                                                 <span aria-hidden="true"> &rarr;</span>
                                             </button>
@@ -553,7 +649,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const dayMessages = @json($dayMessages ?? []);
             const currentDay = '{{ $currentDay ?? 'monday' }}';
-            const themeTitle = '{{ $weeklyTheme['title'] ?? '' }}';
+            const themeTitle = '{{ isset($weeklyTheme) && is_array($weeklyTheme) ? ($weeklyTheme['title'] ?? '') : '' }}';
             
             console.log('Simple Theme Rotator initialized');
             console.log('Current day:', currentDay);

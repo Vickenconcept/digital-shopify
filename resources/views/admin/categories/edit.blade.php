@@ -73,8 +73,8 @@
                             Category Image
                         </label>
                         <div class="mt-2" x-data="{ 
-                            imagePreview: '{{ $category->image_path ? asset('storage/' . $category->image_path) : null }}',
-                            currentImage: '{{ $category->image_path ? asset('storage/' . $category->image_path) : null }}',
+                            imagePreview: '{{ $category->image_path ?: null }}',
+                            currentImage: '{{ $category->image_path ?: null }}',
                             handleFileChange(event) {
                                 const file = event.target.files[0];
                                 if (file) {

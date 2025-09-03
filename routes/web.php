@@ -26,6 +26,14 @@ Route::get('/products', [App\Http\Controllers\ProductController::class, 'index']
 Route::get('/products/search', [App\Http\Controllers\ProductController::class, 'search'])->name('products.search');
 Route::get('/products/{product:slug}', [App\Http\Controllers\ProductController::class, 'show'])->name('products.show');
 
+// SEO Category Landing Pages
+Route::get('/christian-audiobooks', [App\Http\Controllers\SeoCategoryController::class, 'christianAudiobooks'])->name('seo.christian-audiobooks');
+Route::get('/children-audiobooks', [App\Http\Controllers\SeoCategoryController::class, 'childrenStories'])->name('seo.children-stories');
+Route::get('/commuter-audiobooks', [App\Http\Controllers\SeoCategoryController::class, 'commuterAudiobooks'])->name('seo.commuter-audiobooks');
+Route::get('/inspiration-health', [App\Http\Controllers\SeoCategoryController::class, 'inspirationHealth'])->name('seo.inspiration-health');
+
+
+
 
 
 Route::middleware('guest')->group(function () {

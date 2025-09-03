@@ -1,4 +1,12 @@
 <x-main-layout>
+    @seo([
+        'title' => 'Blog | Your Journey Voices – Inspiring Stories & Christian Content',
+        'description' => 'Read inspiring blog posts about Christian audiobooks, children\'s stories, personal growth, and faith-based content. Discover stories that inspire and travel with you.',
+        'keywords' => 'Christian blog, inspirational stories, faith-based content, audiobook reviews, children stories blog, personal growth, spiritual journey',
+        'image' => asset('images/blog-og.jpg'),
+        'site_name' => 'Your Journey Voices',
+    ])
+
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <!-- Featured Posts -->

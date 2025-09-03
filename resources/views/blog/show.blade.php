@@ -1,4 +1,12 @@
 <x-main-layout>
+    @seo([
+        'title' => $blog->title . ' | Your Journey Voices',
+        'description' => $blog->excerpt ?: 'Read this inspiring blog post from Your Journey Voices. Discover stories that inspire and travel with you.',
+        'keywords' => 'Christian blog, inspirational stories, faith-based content, ' . strtolower($blog->title),
+        'image' => $blog->featured_image ? asset('storage/' . $blog->featured_image) : asset('images/blog-post-og.jpg'),
+        'site_name' => 'Your Journey Voices',
+    ])
+
     <article class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <!-- Article Header -->

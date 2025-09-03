@@ -113,7 +113,7 @@
                         <!-- Category Image/Icon -->
                         <div class="relative h-40 bg-gradient-to-br from-blue-50 to-indigo-100">
                             @if($category->image_path)
-                                <img src="{{ asset('storage/' . $category->image_path) }}" 
+                                <img src="{{ $category->image_path }}" 
                                      alt="{{ $category->name }}" 
                                      class="w-full h-full object-cover">
                             @else

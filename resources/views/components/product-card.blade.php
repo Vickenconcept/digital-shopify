@@ -65,7 +65,7 @@
         }
     }
 }">
-    <div class="relative h-64 w-full overflow-hidden rounded-lg bg-gray-200">
+    <div class="relative h-64 w-full overflow-hidden rounded-lg bg-gray-200 shadow-2xl shadow-blue-100 ">
         <a href="{{ route('products.show', $product) }}" class="block h-full">
             <div class="h-full w-full flex items-center justify-center">
                 <img src="{{ $product->thumbnail_path }}" alt="{{ $product->title }}"

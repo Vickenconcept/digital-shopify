@@ -1,4 +1,12 @@
 <x-main-layout>
+    @seo([
+        'title' => 'Blog Archive | Your Journey Voices – All Inspiring Stories & Articles',
+        'description' => 'Browse our complete collection of blog posts, articles, and reflections. Find inspiring Christian content, audiobook reviews, and personal growth stories.',
+        'keywords' => 'blog archive, Christian articles, inspirational posts, audiobook reviews, faith stories, spiritual journey, personal growth blog',
+        'image' => asset('images/blog-archive-og.jpg'),
+        'site_name' => 'Your Journey Voices',
+    ])
+
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="mb-8">

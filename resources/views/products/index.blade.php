@@ -1,4 +1,99 @@
 <x-main-layout>
+    @seo([
+        'title' => 'All Resources | Your Journey Voices – Audiobooks & Ebooks Collection',
+        'description' => 'Browse our complete collection of Christian audiobooks, children\'s stories, inspirational content, and commuter-friendly audiobooks. Stories that inspire and travel with you.',
+        'keywords' => 'audiobooks collection, ebooks library, Christian audiobooks, children stories, inspirational content, commuter audiobooks, digital resources',
+        'image' => asset('images/all-resources-og.jpg'),
+        'site_name' => 'Your Journey Voices',
+    ])
+
+    <!-- Hero Section -->
+    <div class="bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 text-white py-16">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6">
+                    Your Complete Resource Library
+                </h1>
+                <p class="text-xl md:text-2xl mb-8 text-blue-100 leading-relaxed">
+                    Discover our entire collection of inspiring audiobooks and ebooks. From Christian content to children's stories, 
+                    commuter-friendly audiobooks to personal growth resources – find the perfect story for every moment of your journey.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <a href="#featured" class="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors inline-block">
+                        Explore Featured Content
+                    </a>
+                    <a href="#all-products" class="bg-white/20 hover:bg-white/30 text-white px-8 py-3 rounded-lg font-semibold transition-colors inline-block backdrop-blur-sm">
+                        Browse All Resources
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Categories Section -->
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+                    Explore by Category
+                </h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Find exactly what you're looking for with our curated collections
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <a href="{{ route('seo.christian-audiobooks') }}" class="group bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-200 transition-colors">
+                            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Christian Audiobooks</h3>
+                        <p class="text-sm text-gray-600">Faith-based stories and biblical content</p>
+                    </div>
+                </a>
+                
+                <a href="{{ route('seo.children-stories') }}" class="group bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-pink-200 transition-colors">
+                            <svg class="w-8 h-8 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Children's Stories</h3>
+                        <p class="text-sm text-gray-600">Bedtime stories and family-friendly content</p>
+                    </div>
+                </a>
+                
+                <a href="{{ route('seo.commuter-audiobooks') }}" class="group bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-green-200 transition-colors">
+                            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Commuter Audiobooks</h3>
+                        <p class="text-sm text-gray-600">Perfect for drives and travel</p>
+                    </div>
+                </a>
+                
+                <a href="{{ route('seo.inspiration-health') }}" class="group bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-purple-200 transition-colors">
+                            <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Inspiration & Health</h3>
+                        <p class="text-sm text-gray-600">Personal growth and wellness content</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
     <div class="bg-white" 
     x-data="{ 
         selectedCategories: {{ json_encode((array)request('category', [])) }},
@@ -33,8 +128,8 @@
     }"
 >
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div class="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
-                <h1 class="text-4xl font-bold tracking-tight text-gray-900">Digital Products</h1>
+            <div class="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-12" id="all-products">
+                <h2 class="text-3xl font-bold tracking-tight text-gray-900">All Digital Resources</h2>
 
                 <div class="flex items-center space-x-4">
                     <!-- Mobile Filter Button -->

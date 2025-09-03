@@ -1,2 +1,18 @@
 User-agent: *
-Disallow:
+Allow: /
+
+# Sitemap
+Sitemap: https://yourjourneyvoices.com/sitemap.xml
+
+# Disallow admin areas
+Disallow: /admin/
+Disallow: /user/
+Disallow: /payment/
+
+# Allow important SEO pages
+Allow: /christian-audiobooks
+Allow: /children-audiobooks
+Allow: /commuter-audiobooks
+Allow: /inspiration-health
+Allow: /blog/
+Allow: /products/

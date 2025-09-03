@@ -30,6 +30,18 @@ class WelcomeController extends Controller
             ->withCount('digitalProducts')
             ->get();
 
-        return view('home', compact('featuredProducts', 'latestAudios', 'categories'));
+        // Get site settings or create default
+        $siteSettings = SiteSetting::first();
+        if (!$siteSettings) {
+            $siteSettings = new SiteSetting();
+        }
+
+        // Get weekly theme
+        $weeklyTheme = [
+            'title' => $siteSettings->weekly_theme_title ?? 'Your Journey Voices – Stories That Travel With You',
+            'description' => $siteSettings->weekly_theme_description ?? 'Discover inspiring Christian audiobooks, children\'s bedtime stories, and motivational content perfect for commuters. Your Journey Voices brings you stories that inspire, educate, and travel with you wherever life takes you.',
+        ];
+
+        return view('home', compact('featuredProducts', 'latestAudios', 'categories', 'siteSettings', 'weeklyTheme'));
     }
 }
