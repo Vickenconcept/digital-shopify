@@ -198,4 +198,25 @@ class ProductController extends Controller
             'message' => 'Product status updated successfully.'
         ]);
     }
+
+    /**
+     * Bulk delete products.
+     */
+    public function bulkDelete(Request $request)
+    {
+        $request->validate([
+            'product_ids' => 'required|string'
+        ]);
+
+        $productIds = explode(',', $request->product_ids);
+        $productIds = array_filter($productIds, 'is_numeric'); // Remove any non-numeric values
+
+        if (empty($productIds)) {
+            return response()->json(['error' => 'No valid products selected for deletion.'], 400);
+        }
+
+        $deletedCount = DigitalProduct::whereIn('id', $productIds)->delete();
+
+        return response()->json(['success' => "Successfully deleted {$deletedCount} product(s)."]);
+    }
 }

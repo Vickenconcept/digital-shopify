@@ -33,6 +33,21 @@
             </div>
         @endif
 
+        @if(request('deleted'))
+            <div class="mb-6 rounded-lg bg-green-50 p-4 border border-green-200">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-green-800">Successfully deleted {{ request('deleted') }} product(s).</p>
+                    </div>
+                </div>
+            </div>
+        @endif
+
         <!-- Search and Filter Section -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6" x-data="{ 
             searchTerm: '{{ request('search', '') }}',
@@ -358,11 +373,49 @@
                 </div>
             @else
                 <!-- Table View -->
-                <div class="bg-white shadow-sm rounded-xl border border-gray-200 overflow-hidden mb-8">
+                <div class="bg-white shadow-sm rounded-xl border border-gray-200 overflow-hidden mb-8" x-data="bulkDeleteManager()">
+                    <!-- Bulk Actions Bar -->
+                    <div style="display: none;" x-show="selectedItems.length > 0" 
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="opacity-0 transform -translate-y-2"
+                         x-transition:enter-end="opacity-100 transform translate-y-0"
+                         class="bg-orange-50 border-b border-orange-200 px-6 py-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <span class="text-sm font-medium text-orange-800">
+                                    <span x-text="selectedItems.length"></span> item(s) selected
+                                </span>
+                                <button @click="selectAll()" 
+                                        class="text-sm text-orange-600 hover:text-orange-800 font-medium">
+                                    Select All
+                                </button>
+                                <button @click="clearSelection()" 
+                                        class="text-sm text-orange-600 hover:text-orange-800 font-medium">
+                                    Clear Selection
+                                </button>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <button @click="confirmBulkDelete()" 
+                                        class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200">
+                                    <svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                    Delete Selected
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <input type="checkbox" 
+                                               @change="toggleSelectAll()" 
+                                               :checked="selectedItems.length === {{ $products->count() }} && selectedItems.length > 0"
+                                               class="h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded">
+                                    </th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
@@ -374,7 +427,14 @@
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @foreach($products as $product)
-                                    <tr class="hover:bg-gray-50">
+                                    <tr class="hover:bg-gray-50" :class="selectedItems.includes({{ $product->id }}) ? 'bg-orange-50' : ''">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <input type="checkbox" 
+                                                   value="{{ $product->id }}" 
+                                                   @change="toggleItem({{ $product->id }})"
+                                                   :checked="selectedItems.includes({{ $product->id }})"
+                                                   class="h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded">
+                                        </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="flex items-center">
                                                 <div class="h-12 w-12 flex-shrink-0">
@@ -531,4 +591,154 @@
             </div>
         @endif
     </div>
+
+    <!-- Hidden Bulk Delete Form -->
+    <form id="bulkDeleteForm" action="{{ route('admin.products.bulk-delete') }}" method="POST" style="display: none;">
+        @csrf
+        <input type="hidden" name="_method" value="DELETE">
+        <input type="hidden" name="product_ids" id="bulkDeleteIds">
+    </form>
+
+    <!-- Bulk Delete Confirmation Modal -->
+    <div x-show="showBulkDeleteModal" 
+         x-cloak
+         class="fixed inset-0 z-50 overflow-y-auto"
+         style="background-color: rgba(0,0,0,0.5);"
+         @click.self="showBulkDeleteModal = false"
+         @keydown.escape.window="showBulkDeleteModal = false">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+                <div class="p-6">
+                    <!-- Close button -->
+                    <div class="flex justify-end mb-4">
+                        <button @click="showBulkDeleteModal = false" 
+                                class="text-gray-400 hover:text-gray-600">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <div class="flex items-center mb-4">
+                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
+                            <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-medium text-gray-900 text-center mb-2">Delete Products</h3>
+                    <p class="text-sm text-gray-500 text-center mb-6">
+                        Are you sure you want to delete <span x-text="selectedItems.length"></span> selected product(s)? This action cannot be undone.
+                    </p>
+                    <div class="flex space-x-3">
+                        <button @click="executeBulkDelete()" 
+                                class="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
+                            Delete
+                        </button>
+                        <button @click="showBulkDeleteModal = false" 
+                                class="flex-1 bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
+
+    <script>
+        function bulkDeleteManager() {
+            return {
+                selectedItems: [],
+                showBulkDeleteModal: false,
+                isDeleting: false,
+
+                init() {
+                    console.log('Bulk delete manager initialized, showBulkDeleteModal:', this.showBulkDeleteModal);
+                },
+
+                toggleItem(id) {
+                    const index = this.selectedItems.indexOf(id);
+                    if (index > -1) {
+                        this.selectedItems.splice(index, 1);
+                    } else {
+                        this.selectedItems.push(id);
+                    }
+                },
+
+                toggleSelectAll() {
+                    const totalProducts = {{ $products->count() }};
+                    if (this.selectedItems.length === totalProducts && totalProducts > 0) {
+                        this.selectedItems = [];
+                    } else {
+                        this.selectedItems = [{{ $products->pluck('id')->join(',') }}];
+                    }
+                },
+
+                selectAll() {
+                    this.selectedItems = [{{ $products->pluck('id')->join(',') }}];
+                },
+
+                clearSelection() {
+                    this.selectedItems = [];
+                },
+
+                confirmBulkDelete() {
+                    console.log('confirmBulkDelete called, selectedItems:', this.selectedItems);
+                    console.log('selectedItems.length:', this.selectedItems.length);
+                    if (this.selectedItems.length > 0) {
+                        // Use simple confirm for now
+                        if (confirm(`Are you sure you want to delete ${this.selectedItems.length} selected product(s)? This action cannot be undone.`)) {
+                            this.executeBulkDelete();
+                        }
+                    } else {
+                        alert('Please select at least one product to delete.');
+                    }
+                },
+
+                async executeBulkDelete() {
+                    if (this.isDeleting) return;
+                    
+                    this.isDeleting = true;
+                    
+                    try {
+                        const url = '{{ route("admin.products.bulk-delete") }}';
+                        console.log('Making request to:', url);
+                        
+                        // Make a DELETE request directly
+                        const response = await fetch(url, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({
+                                product_ids: this.selectedItems.join(',')
+                            })
+                        });
+                        
+                        console.log('Response status:', response.status);
+                        console.log('Response URL:', response.url);
+                        
+                        if (response.ok) {
+                            // Redirect to the products page with success message
+                            window.location.href = '{{ route("admin.products.index") }}?deleted=' + this.selectedItems.length;
+                        } else {
+                            const errorText = await response.text();
+                            console.error('Error response:', errorText);
+                            alert('Error deleting products. Please try again.');
+                        }
+                    } catch (error) {
+                        console.error('Error during bulk delete:', error);
+                        alert('An error occurred while deleting products. Please try again.');
+                    } finally {
+                        this.isDeleting = false;
+                    }
+                }
+            }
+        }
+    </script>
 </x-admin-layout>

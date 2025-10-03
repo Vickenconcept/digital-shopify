@@ -74,6 +74,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {
     // Route::middleware(['role:admin|super-admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+        Route::delete('products/bulk-delete', [App\Http\Controllers\Admin\ProductController::class, 'bulkDelete'])->name('products.bulk-delete');
         Route::resource('products', App\Http\Controllers\Admin\ProductController::class);
         Route::post('products/{product}/toggle-status', [App\Http\Controllers\Admin\ProductController::class, 'toggleStatus'])->name('products.toggle-status');
         Route::resource('categories', App\Http\Controllers\Admin\CategoryController::class);
