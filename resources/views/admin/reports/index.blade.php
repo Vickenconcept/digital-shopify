@@ -95,7 +95,6 @@
     <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
         <p class="text-sm text-gray-600">
             <strong>{{ number_format($stats['pending']) }}</strong> pending checkout(s) in the selected period.
-            Schedule <code class="text-xs bg-gray-100 px-1 rounded">php artisan queue:work</code> in production so receipt emails send reliably.
         </p>
     </div>
 </div>

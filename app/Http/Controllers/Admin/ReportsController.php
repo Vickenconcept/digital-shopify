@@ -38,14 +38,14 @@ class ReportsController extends Controller
         $stats['refund_rate'] = $stats['orders'] > 0 ? round(($stats['refunded'] / max(1, $stats['orders'] + $stats['refunded'])) * 100, 1) : 0;
 
         $topProducts = DigitalProduct::query()
-            ->select('digital_products.*')
+            ->select('digital_products.id', 'digital_products.title')
             ->selectRaw('COUNT(order_items.id) as sales_count')
             ->selectRaw('COALESCE(SUM(order_items.price * order_items.quantity), 0) as revenue')
             ->join('order_items', 'order_items.digital_product_id', '=', 'digital_products.id')
             ->join('orders', 'orders.id', '=', 'order_items.order_id')
             ->where('orders.payment_status', 'completed')
             ->where('orders.created_at', '>=', $from)
-            ->groupBy('digital_products.id')
+            ->groupBy('digital_products.id', 'digital_products.title')
             ->orderByDesc('sales_count')
             ->limit(10)
             ->get();
