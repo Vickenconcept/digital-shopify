@@ -32,6 +32,9 @@ class SiteSettingController extends Controller
             'notify_admin_contact' => 'sometimes|boolean',
             'audit_log_retention_days' => 'nullable|integer|min:0|max:3650',
             'tax_rate' => 'nullable|numeric|min:0|max:100',
+            'stripe_key' => 'nullable|string|max:500',
+            'stripe_secret' => 'nullable|string|max:500',
+            'stripe_webhook_secret' => 'nullable|string|max:500',
             'facebook_link' => 'nullable|url|max:255',
             'twitter_link' => 'nullable|url|max:255',
             'instagram_link' => 'nullable|url|max:255',
@@ -42,6 +45,12 @@ class SiteSettingController extends Controller
         $validated['notify_admin_new_order'] = $request->boolean('notify_admin_new_order');
         $validated['notify_admin_new_user'] = $request->boolean('notify_admin_new_user');
         $validated['notify_admin_contact'] = $request->boolean('notify_admin_contact');
+
+        foreach (['stripe_secret', 'stripe_webhook_secret'] as $secretField) {
+            if (! $request->filled($secretField)) {
+                unset($validated[$secretField]);
+            }
+        }
 
         $settings->fill($validated);
         $settings->save();

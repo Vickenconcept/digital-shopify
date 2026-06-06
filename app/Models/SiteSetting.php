@@ -32,12 +32,20 @@ class SiteSetting extends Model
         'notify_admin_contact',
         'audit_log_retention_days',
         'tax_rate',
+        'stripe_key',
+        'stripe_secret',
+        'stripe_webhook_secret',
         'hero_image_1',
         'hero_image_2',
         'hero_image_3',
         'banner_image_1',
         'banner_image_2',
         'banner_image_3',
+    ];
+
+    protected $hidden = [
+        'stripe_secret',
+        'stripe_webhook_secret',
     ];
 
     protected $casts = [

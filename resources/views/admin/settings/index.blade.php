@@ -111,6 +111,56 @@
             </div>
         </div>
 
+        {{-- ── Stripe payments ────────────────────────────────────── --}}
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-100">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-violet-50 flex items-center justify-center shrink-0">
+                        <svg class="w-5 h-5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="text-base font-semibold text-gray-900">Stripe Payments</h2>
+                        <p class="text-sm text-gray-500">Manage checkout keys here instead of editing <code class="text-xs bg-gray-100 px-1 rounded">.env</code>. Values saved here override environment variables.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 space-y-6">
+                <div>
+                    <label for="stripe_key" class="block text-sm font-medium text-gray-700 mb-1">Publishable key <span class="text-gray-400 font-normal">(STRIPE_KEY)</span></label>
+                    <input type="text" id="stripe_key" name="stripe_key"
+                           value="{{ old('stripe_key', $settings->stripe_key) }}"
+                           placeholder="pk_live_..."
+                           autocomplete="off"
+                           class="w-full px-4 py-2.5 text-sm font-mono border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-orange-500">
+                    <p class="mt-1.5 text-xs text-gray-500">Used on the storefront for Stripe Checkout. Starts with <code class="text-gray-600">pk_</code>.</p>
+                </div>
+                <div>
+                    <label for="stripe_secret" class="block text-sm font-medium text-gray-700 mb-1">Secret key <span class="text-gray-400 font-normal">(STRIPE_SECRET)</span></label>
+                    <input type="password" id="stripe_secret" name="stripe_secret"
+                           value=""
+                           placeholder="{{ filled($settings->stripe_secret) ? 'Saved — leave blank to keep current key' : 'sk_live_...' }}"
+                           autocomplete="new-password"
+                           class="w-full px-4 py-2.5 text-sm font-mono border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-orange-500">
+                    @if(filled($settings->stripe_secret))
+                        <p class="mt-1.5 text-xs text-green-700">A secret key is saved. Enter a new value only if you want to replace it.</p>
+                    @else
+                        <p class="mt-1.5 text-xs text-gray-500">Used server-side for charges and refunds. Starts with <code class="text-gray-600">sk_</code>.</p>
+                    @endif
+                </div>
+                <div>
+                    <label for="stripe_webhook_secret" class="block text-sm font-medium text-gray-700 mb-1">Webhook signing secret <span class="text-gray-400 font-normal">(optional)</span></label>
+                    <input type="password" id="stripe_webhook_secret" name="stripe_webhook_secret"
+                           value=""
+                           placeholder="{{ filled($settings->stripe_webhook_secret) ? 'Saved — leave blank to keep current secret' : 'whsec_...' }}"
+                           autocomplete="new-password"
+                           class="w-full px-4 py-2.5 text-sm font-mono border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-orange-500">
+                    <p class="mt-1.5 text-xs text-gray-500">Required for Stripe webhooks to verify payment events. Starts with <code class="text-gray-600">whsec_</code>.</p>
+                </div>
+            </div>
+        </div>
+
         {{-- ── Store, notifications & audit ─────────────────────── --}}
         <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
             <div class="px-6 py-4 border-b border-gray-100">
