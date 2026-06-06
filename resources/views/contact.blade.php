@@ -4,7 +4,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 class="text-4xl font-bold text-gray-900 mb-4">Get in Touch</h1>
             <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                Have questions or want to learn more about our ministry? We'd love to hear from you and connect with your spiritual journey.
+                Questions about audiobooks, orders, or your account? Send us a message and we will get back to you soon.
             </p>
         </div>
     </div>
@@ -19,15 +19,22 @@
                             Let's Connect
                     </h2>
                         <p class="text-lg text-gray-600">
-                            We're here to support you on your spiritual journey. Reach out to us through any of these channels.
+                            We are here to help with orders, downloads, and general questions about Your Journey Voices.
                         </p>
                     </div>
 
-                    <!-- Contact Methods -->
+                    @php
+                        $displayEmail = $siteSettings->contact_email ?? null;
+                        $displayPhone = $siteSettings->contact_phone ?? null;
+                        $displayAddress = $siteSettings->contact_address ?? null;
+                        $hasContactInfo = filled($displayEmail) || filled($displayPhone) || filled($displayAddress);
+                    @endphp
+
+                    @if($hasContactInfo)
                     <div class="space-y-6">
                         <h3 class="text-xl font-semibold text-gray-900">Contact Information</h3>
-                        
-                        <!-- Email -->
+
+                        @if(filled($displayEmail))
                         <div class="flex items-center space-x-4 p-4 bg-white rounded-lg shadow-sm border border-gray-200">
                             <div class="flex-shrink-0">
                                 <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
@@ -38,11 +45,12 @@
                             </div>
                             <div>
                                 <p class="text-sm font-medium text-gray-900">Email</p>
-                                <p class="text-sm text-gray-600">info@joyccee.com</p>
+                                <a href="mailto:{{ $displayEmail }}" class="text-sm text-orange-600 hover:text-orange-700">{{ $displayEmail }}</a>
                             </div>
                         </div>
+                        @endif
 
-                        <!-- Phone -->
+                        @if(filled($displayPhone))
                         <div class="flex items-center space-x-4 p-4 bg-white rounded-lg shadow-sm border border-gray-200">
                             <div class="flex-shrink-0">
                                 <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
@@ -53,12 +61,14 @@
                             </div>
                             <div>
                                 <p class="text-sm font-medium text-gray-900">Phone</p>
-                                <p class="text-sm text-gray-600">+1 (555) 123-4567</p>
+                                @php $phoneHref = preg_replace('/[^\d+]/', '', $displayPhone); @endphp
+                                <a href="tel:{{ $phoneHref }}" class="text-sm text-orange-600 hover:text-orange-700">{{ $displayPhone }}</a>
                             </div>
                         </div>
+                        @endif
 
-                        <!-- Address -->
-                        <div class="flex items-center space-x-4 p-4 bg-white rounded-lg shadow-sm border border-gray-200">
+                        @if(filled($displayAddress))
+                        <div class="flex items-start space-x-4 p-4 bg-white rounded-lg shadow-sm border border-gray-200">
                             <div class="flex-shrink-0">
                                 <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
                                     <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -69,71 +79,55 @@
                             </div>
                             <div>
                                 <p class="text-sm font-medium text-gray-900">Address</p>
-                                <p class="text-sm text-gray-600">123 Faith Street<br>Spiritual City, SC 12345</p>
+                                <p class="text-sm text-gray-600 whitespace-pre-line">{{ $displayAddress }}</p>
                             </div>
                         </div>
+                        @endif
                     </div>
+                    @else
+                    <div class="rounded-lg border border-dashed border-gray-300 bg-white p-6 text-center">
+                        <p class="text-sm text-gray-500">Contact details will appear here once configured in Site Settings.</p>
+                    </div>
+                    @endif
 
-                    <!-- Social Links -->
+                    @if(isset($siteSettings) && ($siteSettings->facebook_link || $siteSettings->twitter_link || $siteSettings->instagram_link || $siteSettings->youtube_link || $siteSettings->tiktok_link))
                     <div class="space-y-6">
                         <h3 class="text-xl font-semibold text-gray-900">Follow Us</h3>
-                        <div class="flex space-x-4">
-                            <a href="#" class="flex items-center justify-center w-12 h-12 bg-white rounded-lg shadow-sm border border-gray-200 text-gray-600 hover:text-orange-500 hover:border-orange-300 transition-colors duration-200">
-                                <span class="sr-only">Facebook</span>
-                                <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                                    <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
-                                </svg>
-                            </a>
-                            <a href="#" class="flex items-center justify-center w-12 h-12 bg-white rounded-lg shadow-sm border border-gray-200 text-gray-600 hover:text-orange-500 hover:border-orange-300 transition-colors duration-200">
-                                <span class="sr-only">YouTube</span>
-                                <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                                    <path fill-rule="evenodd" d="M19.812 5.418c.861.23 1.538.907 1.768 1.768C21.998 8.746 22 12 22 12s0 3.255-.418 4.814a2.504 2.504 0 0 1-1.768 1.768c-1.56.419-7.814.419-7.814.419s-6.255 0-7.814-.419a2.505 2.505 0 0 1-1.768-1.768C2 15.255 2 12 2 12s0-3.255.417-4.814a2.507 2.507 0 0 1 1.768-1.768C5.744 5 11.998 5 11.998 5s6.255 0 7.814.418ZM15.194 12 10 15V9l5.194 3Z" clip-rule="evenodd" />
-                                </svg>
-                            </a>
-                            <a href="#" class="flex items-center justify-center w-12 h-12 bg-white rounded-lg shadow-sm border border-gray-200 text-gray-600 hover:text-orange-500 hover:border-orange-300 transition-colors duration-200">
-                                <span class="sr-only">Instagram</span>
-                                <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                                    <path fill-rule="evenodd" d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987s11.987-5.367 11.987-11.987C24.014 5.367 18.647.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.323-1.297C4.198 14.895 3.708 13.744 3.708 12.447s.49-2.448 1.297-3.323c.875-.807 2.026-1.297 3.323-1.297s2.448.49 3.323 1.297c.807.875 1.297 2.026 1.297 3.323s-.49 2.448-1.297 3.323c-.875.807-2.026 1.297-3.323 1.297zm7.83-9.281H7.721v8.562h8.558V7.707z" clip-rule="evenodd" />
-                                </svg>
-                            </a>
+                        <p class="text-sm text-gray-600">Connect with us on social media. Links are managed in Admin → Site Settings.</p>
+                        <div class="flex flex-wrap gap-3">
+                            @if($siteSettings->facebook_link)
+                                <a href="{{ $siteSettings->facebook_link }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center w-12 h-12 bg-white rounded-lg shadow-sm border border-gray-200 text-gray-600 hover:text-orange-500 hover:border-orange-300 transition-colors duration-200">
+                                    <span class="sr-only">Facebook</span>
+                                    <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd"/></svg>
+                                </a>
+                            @endif
+                            @if($siteSettings->youtube_link)
+                                <a href="{{ $siteSettings->youtube_link }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center w-12 h-12 bg-white rounded-lg shadow-sm border border-gray-200 text-gray-600 hover:text-orange-500 hover:border-orange-300 transition-colors duration-200">
+                                    <span class="sr-only">YouTube</span>
+                                    <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M19.812 5.418c.861.23 1.538.907 1.768 1.768C21.998 8.746 22 12 22 12s0 3.255-.418 4.814a2.504 2.504 0 0 1-1.768 1.768c-1.56.419-7.814.419-7.814.419s-6.255 0-7.814-.419a2.505 2.505 0 0 1-1.768-1.768C2 15.255 2 12 2 12s0-3.255.417-4.814a2.507 2.507 0 0 1 1.768-1.768C5.744 5 11.998 5 11.998 5s6.255 0 7.814.418ZM15.194 12 10 15V9l5.194 3Z" clip-rule="evenodd"/></svg>
+                                </a>
+                            @endif
+                            @if($siteSettings->instagram_link)
+                                <a href="{{ $siteSettings->instagram_link }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center w-12 h-12 bg-white rounded-lg shadow-sm border border-gray-200 text-gray-600 hover:text-orange-500 hover:border-orange-300 transition-colors duration-200">
+                                    <span class="sr-only">Instagram</span>
+                                    <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987s11.987-5.367 11.987-11.987C24.014 5.367 18.647.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.323-1.297C4.198 14.895 3.708 13.744 3.708 12.447s.49-2.448 1.297-3.323c.875-.807 2.026-1.297 3.323-1.297s2.448.49 3.323 1.297c.807.875 1.297 2.026 1.297 3.323s-.49 2.448-1.297 3.323c-.875.807-2.026 1.297-3.323 1.297zm7.83-9.281H7.721v8.562h8.558V7.707z" clip-rule="evenodd"/></svg>
+                                </a>
+                            @endif
+                            @if($siteSettings->twitter_link)
+                                <a href="{{ $siteSettings->twitter_link }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center w-12 h-12 bg-white rounded-lg shadow-sm border border-gray-200 text-gray-600 hover:text-orange-500 hover:border-orange-300 transition-colors duration-200">
+                                    <span class="sr-only">Twitter / X</span>
+                                    <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                                </a>
+                            @endif
+                            @if($siteSettings->tiktok_link)
+                                <a href="{{ $siteSettings->tiktok_link }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center w-12 h-12 bg-white rounded-lg shadow-sm border border-gray-200 text-gray-600 hover:text-orange-500 hover:border-orange-300 transition-colors duration-200">
+                                    <span class="sr-only">TikTok</span>
+                                    <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
+                                </a>
+                            @endif
                         </div>
                     </div>
-
-                    <!-- Newsletter Subscription -->
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                        <div class="flex items-center space-x-3 mb-4">
-                            <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
-                                <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                                </svg>
-                            </div>
-                            <h3 class="text-xl font-semibold text-gray-900">
-                                Newsletter
-                        </h3>
-                        </div>
-                        <p class="text-gray-600 mb-6">
-                            Stay updated with our latest messages, events, and spiritual resources delivered to your inbox.
-                        </p>
-                        <form action="{{ route('newsletter.subscribe') }}" method="POST" class="space-y-4">
-                            @csrf
-                            <div>
-                                <label for="newsletter-email" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
-                                    <input type="email" name="email" id="newsletter-email" required
-                                    class="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 transition-colors duration-200"
-                                    placeholder="Enter your email address">
-                                </div>
-                                <button type="submit"
-                                class="w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors duration-200">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                                </svg>
-                                Subscribe to Newsletter
-                                </button>
-                            @error('email')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </form>
-                    </div>
+                    @endif
                 </div>
 
                 <!-- Contact Form -->

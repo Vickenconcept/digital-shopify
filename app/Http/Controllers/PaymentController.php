@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\DigitalProduct;
+use App\Services\ActivityLogger;
 use App\Services\PaymentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -17,8 +19,10 @@ class PaymentController extends Controller
 {
     private PaymentService $paymentService;
 
-    public function __construct(PaymentService $paymentService)
-    {
+    public function __construct(
+        PaymentService $paymentService,
+        private readonly ActivityLogger $activityLogger,
+    ) {
         $this->paymentService = $paymentService;
     }
 
@@ -63,6 +67,14 @@ class PaymentController extends Controller
             if (!$checkoutSession) {
                 throw new \Exception('Failed to create checkout session');
             }
+
+            $this->activityLogger->log(
+                ActivityLog::LOG_ORDER,
+                'checkout_started',
+                "Checkout started for order #{$order->id} (\${$order->total_amount})",
+                $order,
+                properties: ['item_count' => count($cartItems)]
+            );
 
             return response()->json([
                 'checkoutUrl' => $checkoutSession->url,
@@ -121,6 +133,12 @@ class PaymentController extends Controller
             );
 
             switch ($event->type) {
+                case 'checkout.session.completed':
+                    $session = $event->data->object;
+                    if (!empty($session->id)) {
+                        $this->paymentService->handleCheckoutSessionCompleted($session->id);
+                    }
+                    break;
                 case 'payment_intent.succeeded':
                     $this->paymentService->handleSuccessfulPayment($event->data->object->id);
                     break;

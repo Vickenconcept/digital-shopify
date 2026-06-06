@@ -76,7 +76,9 @@
                             <select x-model="selectedCategory" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                                 <option value="">All Categories</option>
                                 @foreach($availableCategories as $category)
-                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @if($category)
+                                    <option value="{{ optional($category)->id }}">{{ optional($category)->name }}</option>
+                                    @endif
                                 @endforeach
                             </select>
                         </div>
@@ -224,9 +226,9 @@
                         <div class="bg-white rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-200 overflow-hidden border border-gray-100">
                             <!-- Product Image -->
                             <div class="relative">
-                                @if($product->thumbnail_path)
+                                @if(optional($product)->thumbnail_path)
                                     <div class="h-48 overflow-hidden">
-                                        <img src="{{ $product->thumbnail_path }}" alt="{{ $product->title }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-200">
+                                        <img src="{{ optional($product)->thumbnail_path }}" alt="{{ optional($product)->title }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-200">
                                     </div>
                                 @else
                                     <div class="h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
@@ -239,15 +241,15 @@
                                 <!-- File Type Badge -->
                                 <div class="absolute top-3 left-3">
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                        @if($product->file_type === 'audio') bg-green-100 text-green-800
-                                        @elseif($product->file_type === 'video') bg-red-100 text-red-800
+                                        @if(optional($product)->file_type === 'audio') bg-green-100 text-green-800
+                                        @elseif(optional($product)->file_type === 'video') bg-red-100 text-red-800
                                         @else bg-yellow-100 text-yellow-800
                                         @endif">
-                                        @if($product->file_type === 'audio')
+                                        @if(optional($product)->file_type === 'audio')
                                             <svg class="mr-1 h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
                                             </svg>
-                                        @elseif($product->file_type === 'video')
+                                        @elseif(optional($product)->file_type === 'video')
                                             <svg class="mr-1 h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                                             </svg>
@@ -256,7 +258,7 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                                             </svg>
                                         @endif
-                                        {{ ucfirst($product->file_type) }}
+                                        {{ ucfirst(optional($product)->file_type) }}
                                     </span>
                                 </div>
                             </div>
@@ -264,13 +266,13 @@
                             <!-- Product Info -->
                             <div class="p-5">
                                 <div class="flex-1 min-h-0">
-                                    <h3 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">{{ $product->title }}</h3>
-                                    <p class="text-gray-600 text-sm mb-3 line-clamp-3">{{ Str::limit($product->description, 120) }}</p>
+                                    <h3 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">{{ optional($product)->title }}</h3>
+                                    <p class="text-gray-600 text-sm mb-3 line-clamp-3">{{ Str::limit(optional($product)->description, 120) }}</p>
                                     
-                                    @if($product->category)
+                                    @if(optional($product)->category)
                                         <div class="mb-4">
                                             <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-800">
-                                                {{ $product->category->name }}
+                                                {{ optional($product)->category->name }}
                                             </span>
                                         </div>
                                     @endif
@@ -278,8 +280,8 @@
 
                                 <!-- Action Buttons -->
                                 <div class="flex gap-2">
-                                    @if($product->file_type === 'audio' || $product->file_type === 'video')
-                                        <a href="{{ route('user.stream', $product->id) }}" 
+                                    @if(optional($product)->file_type === 'audio' || optional($product)->file_type === 'video')
+                                        <a href="{{ route('user.stream', $product) }}" 
                                            class="flex-1 inline-flex items-center justify-center px-3 py-2 bg-indigo-600 border border-transparent rounded-lg text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
                                             <svg class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
@@ -289,13 +291,17 @@
                                         </a>
                                     @endif
 
-                                    <a href="{{ route('user.download', $product->id) }}" 
+                                    
+                                    @if (isset($product))
+                                        
+                                    <a href="{{ route('user.download', $product) }}" 
                                        class="flex-1 inline-flex items-center justify-center px-3 py-2 bg-gray-800 border border-transparent rounded-lg text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200">
                                         <svg class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                                         </svg>
                                         Download
                                     </a>
+                                    @endif
                                 </div>
                             </div>
                         </div>

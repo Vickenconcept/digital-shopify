@@ -64,18 +64,19 @@
         <!-- Main header -->
         <nav class="bg-white shadow-xl shadow-gray-100">
             <div class="container mx-auto px-6 py-4">
-                <div class="flex justify-between items-center">
-                    <div class="flex items-center">
-                       
-                        <a href="{{ url('/') }}" class="text-2xl font-bold text-orange-500">
+                <div class="flex justify-between items-center w-full gap-4">
+                    <div class="flex items-center min-w-0 flex-1 md:flex-initial">
+                        <a href="{{ url('/') }}" class="text-2xl font-bold text-orange-500 shrink-0">
                             Your Journey Voices
                         </a>
 
                         <div class="hidden md:flex items-center ml-10 space-x-8">
-                            <a href="{{ route('about') }}"
-                                class="text-base font-medium text-gray-700 hover:text-orange-500">
-                                About
-                            </a>
+                            @foreach(($navigationPages ?? collect()) as $navPage)
+                                <a href="{{ $navPage->url }}"
+                                    class="text-base font-medium text-gray-700 hover:text-orange-500">
+                                    {{ $navPage->title }}
+                                </a>
+                            @endforeach
                             <a href="{{ route('blog.index') }}"
                                 class="text-base font-medium text-gray-700 hover:text-orange-500">
                                 Blog
@@ -88,7 +89,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                     </svg>
                                 </a>
-                                <div class="absolute top-full left-0 mt-1 w-64 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                <div class="absolute top-full left-0 mt-1 w-64 bg-white rounded-lg shadow-lg opacity-0 invisible pointer-events-none group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto transition-all duration-200 z-50">
                                     <div class="py-2">
                                         <a href="{{ route('seo.christian-audiobooks') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600">Christian Audiobooks</a>
                                         <a href="{{ route('seo.children-stories') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600">Children's Stories</a>
@@ -104,26 +105,16 @@
                                 Contact
                             </a>
                         </div>
-
-                        <!-- Mobile menu button -->
-                        <div class="md:hidden">
-                            <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-gray-700 hover:text-orange-500">
-                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                                </svg>
-                            </button>
-                        </div>
                     </div>
 
                     <!-- Search bar -->
                     <div class="hidden md:flex items-center flex-1 max-w-lg ml-8" x-data="searchManager()">
-                        <div class="relative w-full">
+                        <div class="relative w-full" @click.outside="showDropdown = false">
                             <input type="text" 
                                 placeholder="Search products..." 
                                 x-model="query"
                                 @input.debounce.300ms="search()"
                                 @focus="showDropdown = true; if (products.length === 0) setTimeout(() => search(), 100)"
-                                @blur="setTimeout(() => showDropdown = false, 200)"
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500">
                             <button @click="showDropdown = true; search()" class="absolute right-3 top-1/2 -translate-y-1/2">
                                 <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24"
@@ -199,6 +190,15 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Mobile menu button -->
+                    <div class="md:hidden shrink-0">
+                        <button type="button" @click="mobileMenuOpen = !mobileMenuOpen" class="p-2 text-gray-700 hover:text-orange-500" aria-label="Open menu">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -214,13 +214,12 @@
              class="md:hidden bg-white border-t border-gray-200">
             <div class="px-4 py-3">
                 <!-- Mobile Search -->
-                <div class="relative mb-4" x-data="searchManager()">
+                <div class="relative mb-4" x-data="searchManager()" @click.outside="showDropdown = false">
                     <input type="text" 
                         placeholder="Search products..." 
                         x-model="query"
                         @input.debounce.300ms="search()"
                         @focus="showDropdown = true; if (products.length === 0) setTimeout(() => search(), 100)"
-                        @blur="setTimeout(() => showDropdown = false, 200)"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-orange-500">
                     
                     <!-- Mobile Search Dropdown -->
@@ -285,9 +284,11 @@
 
                 <!-- Mobile Navigation Links -->
                 <div class="space-y-2">
-                    <a href="{{ route('about') }}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-orange-500 hover:bg-gray-50 rounded-md">
-                        About
-                    </a>
+                    @foreach(($navigationPages ?? collect()) as $navPage)
+                        <a href="{{ $navPage->url }}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-orange-500 hover:bg-gray-50 rounded-md">
+                            {{ $navPage->title }}
+                        </a>
+                    @endforeach
                     <a href="{{ route('blog.index') }}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-orange-500 hover:bg-gray-50 rounded-md">
                         Blog
                     </a>
@@ -320,7 +321,7 @@
     </header>
 
     <!-- Main Content -->
-    <main class="container mx-auto">
+    <main class="lg:container mx-auto">
         @if (isset($header))
             <div class="mb-8">
                 {{ $header }}
@@ -330,16 +331,16 @@
         {{ $slot }}
     </main>
 
-    <!-- Footer -->
+<!-- Footer -->
     <footer class="bg-gradient-to-br from-gray-900 to-black text-white mt-auto">
         <div class="container mx-auto px-6 pt-16 pb-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
                     <h3 class="text-lg font-semibold mb-4">About Us</h3>
                     <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-300 hover:text-orange-500">Our Story</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-orange-500">Mission & Vision</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-orange-500">Leadership</a></li>
+                        <li><a href="{{ route('about') }}" class="text-gray-300 hover:text-orange-500 transition-colors duration-200">About Us</a></li>
+                        <li><a href="{{ route('products.index') }}" class="text-gray-300 hover:text-orange-500 transition-colors duration-200">Browse Resources</a></li>
+                        <li><a href="{{ route('contact') }}" class="text-gray-300 hover:text-orange-500 transition-colors duration-200">Contact</a></li>
                     </ul>
                 </div>
                 <div>
@@ -354,10 +355,11 @@
                 <div>
                     <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
                     <ul class="space-y-2">
+                        @foreach(($footerPages ?? collect()) as $footerPage)
+                            <li><a href="{{ $footerPage->url }}" class="text-gray-300 hover:text-orange-500 transition-colors duration-200">{{ $footerPage->title }}</a></li>
+                        @endforeach
                         <li><a href="{{ route('blog.index') }}" class="text-gray-300 hover:text-orange-500 transition-colors duration-200">Blog</a></li>
                         <li><a href="{{ route('contact') }}" class="text-gray-300 hover:text-orange-500 transition-colors duration-200">Contact</a></li>
-                        <li><a href="{{ route('about') }}" class="text-gray-300 hover:text-orange-500 transition-colors duration-200">About</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-orange-500 transition-colors duration-200">Privacy Policy</a></li>
                     </ul>
                 </div>
                 <div>
@@ -458,14 +460,15 @@
         </button>
 
         <!-- Cart drawer -->
-        <div x-show="open" style="display: none;" class="relative z-50" aria-labelledby="slide-over-title"
-            role="dialog" aria-modal="true">
+        <div x-show="open" x-cloak style="display: none;" class="relative z-50" aria-labelledby="slide-over-title"
+            role="dialog" aria-modal="true" :class="{ 'pointer-events-none': !open }">
             <div x-show="open" x-transition:enter="ease-in-out duration-500" x-transition:enter-start="opacity-0"
                 x-transition:enter-end="opacity-100" x-transition:leave="ease-in-out duration-500"
                 x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                @click="open = false"
                 class="fixed inset-0 bg-gray-500/75 transition-opacity"></div>
 
-            <div class="fixed inset-0 overflow-hidden">
+            <div class="fixed inset-0 overflow-hidden pointer-events-none">
                 <div class="absolute inset-0 overflow-hidden">
                     <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
                         <div x-show="open"
@@ -473,7 +476,7 @@
                             x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0"
                             x-transition:leave="transform transition ease-in-out duration-500 sm:duration-700"
                             x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full"
-                            class="pointer-events-auto w-screen max-w-md">
+                            class="pointer-events-auto w-screen max-w-md" @click.stop>
                             <div class="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
                                 <div class="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
                                     <div class="flex items-start justify-between">
@@ -641,84 +644,6 @@
                 window.stripe = Stripe(stripeKey);
             } catch (error) {
                 console.error('Stripe initialization failed:', error);
-            }
-        });
-    </script>
-
-    <!-- Simple Theme Rotator -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const dayMessages = @json($dayMessages ?? []);
-            const currentDay = '{{ $currentDay ?? 'monday' }}';
-            const themeTitle = '{{ isset($weeklyTheme) && is_array($weeklyTheme) ? ($weeklyTheme['title'] ?? '') : '' }}';
-            
-            console.log('Simple Theme Rotator initialized');
-            console.log('Current day:', currentDay);
-            console.log('Day message:', dayMessages[currentDay]);
-            
-            // Check if we have a message for the current day
-            if (dayMessages[currentDay] && dayMessages[currentDay].trim() !== '') {
-                const messages = [themeTitle, dayMessages[currentDay]];
-                let currentIndex = 0;
-                
-                console.log('Starting rotation with messages:', messages);
-                
-                // Update the title immediately
-                const titleElement = document.getElementById('rotating-title');
-                if (titleElement) {
-                    titleElement.textContent = messages[currentIndex];
-                }
-                
-                // Rotate every 10 seconds
-                setInterval(() => {
-                    currentIndex = (currentIndex + 1) % messages.length;
-                    if (titleElement) {
-                        titleElement.textContent = messages[currentIndex];
-                        console.log('Rotated to:', messages[currentIndex]);
-                    }
-                }, 10000);
-            } else {
-                console.log('No message for', currentDay, '- showing static title');
-            }
-        });
-    </script>
-
-    <!-- Hero Image Rotator -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const heroImages = [];
-            
-            // Collect available hero images
-            for (let i = 1; i <= 3; i++) {
-                const img = document.getElementById(`hero-image-${i}`);
-                if (img && img.src) {
-                    heroImages.push(img);
-                }
-            }
-            
-            console.log('Hero Image Rotator initialized with', heroImages.length, 'images');
-            
-            // Only rotate if we have more than one image
-            if (heroImages.length > 1) {
-                let currentIndex = 0;
-                
-                // Rotate every 10 seconds
-                setInterval(() => {
-                    // Hide current image
-                    heroImages[currentIndex].style.display = 'none';
-                    
-                    // Move to next image
-                    currentIndex = (currentIndex + 1) % heroImages.length;
-                    
-                    // Show next image
-                    heroImages[currentIndex].style.display = 'block';
-                    
-                    console.log('Rotated to hero image', currentIndex + 1);
-                }, 10000);
-            } else if (heroImages.length === 1) {
-                console.log('Only one hero image available, no rotation needed');
-            } else {
-                console.log('No hero images available, using default image');
             }
         });
     </script>
@@ -899,6 +824,9 @@
         }
         }
     </script>
+    @stack('scripts')
+
+    <x-cookie-consent />
 </body>
 
 </html>

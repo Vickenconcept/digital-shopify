@@ -104,6 +104,8 @@
                                 <p class="mt-2 text-sm text-gray-500">A short summary of your blog post.</p>
                             </div>
 
+                            @include('admin.partials.seo-fields', ['model' => $blog])
+
                             <!-- Content -->
                             <div>
                                 <label for="content" class="block text-sm font-medium text-gray-700 mb-2">
@@ -146,7 +148,7 @@
                         </div>
                         <div class="p-6">
                             <div x-data="{ 
-                                imagePreview: '{{ $blog->featured_image ? Storage::url($blog->featured_image) : null }}',
+                                imagePreview: '{{ $blog->featured_image ? $blog->featured_image : null }}',
                                 handleFileChange(event) {
                                     const file = event.target.files[0];
                                     if (file) {

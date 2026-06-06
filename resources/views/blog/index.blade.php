@@ -29,9 +29,8 @@
                     <h2 class="text-3xl font-bold text-gray-900 ">
                         Latest Posts
                     </h2>
-                    <a href="{{ route('blog.archive') }}"
-                        class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300">
-                        View Archive &rarr;
+                    <a href="{{ route('blog.archive') }}" class="text-sm font-semibold text-orange-600 hover:text-orange-700">
+                        View all posts →
                     </a>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">

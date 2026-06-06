@@ -1,10 +1,11 @@
 <aside id="logo-sidebar"
-    class="fixed top-0 left-0 z-50 w-64 h-screen transition-transform -translate-x-full bg-black sm:translate-x-0 p-0"
+    class="fixed top-0 left-0 z-50 w-64 h-screen transition-transform duration-300 ease-in-out bg-black p-0"
+    :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
     aria-label="Sidebar">
     <div class="h-full flex flex-col overflow-hidden">
         <!-- Branding/Header -->
         <div class="flex items-center justify-between px-5 py-4 bg-black border-b border-gray-800">
-            <a href="/home" class="flex items-center text-white">
+            <a href="{{ route('admin.dashboard') }}" class="flex items-center text-white">
                 <div class="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center mr-3">
                     <i class='bx bx-church text-2xl text-white'></i>
                 </div>
@@ -72,11 +73,43 @@
                     </a>
                 </li>
 
+                @if(auth()->user()->hasRole('super-admin'))
+                <li>
+                    <a href="{{ route('admin.admin-users.index') }}"
+                        class="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors group {{ request()->routeIs('admin.admin-users.*') ? 'bg-orange-500 text-white font-semibold' : 'text-gray-400 hover:text-white hover:bg-gray-800' }}">
+                        <i class="bx bx-shield text-xl {{ request()->routeIs('admin.admin-users.*') ? 'text-white' : 'text-gray-400 group-hover:text-white' }}"></i>
+                        <span>Admin Users</span>
+                        <span class="ml-auto px-2 py-0.5 bg-purple-500 text-white text-xs rounded-full font-semibold">SA</span>
+                    </a>
+                </li>
+                @endif
+
                 <li>
                     <a href="{{ route('admin.settings.index') }}"
                         class="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors group {{ request()->routeIs('admin.settings.*') ? 'bg-orange-500 text-white font-semibold' : 'text-gray-400 hover:text-white hover:bg-gray-800' }}">
                         <i class="bx bx-cog text-xl {{ request()->routeIs('admin.settings.*') ? 'text-white' : 'text-gray-400 group-hover:text-white' }}"></i>
                         <span>Site Settings</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.pages.index') }}"
+                        class="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors group {{ request()->routeIs('admin.pages.*') ? 'bg-orange-500 text-white font-semibold' : 'text-gray-400 hover:text-white hover:bg-gray-800' }}">
+                        <i class="bx bx-layout text-xl {{ request()->routeIs('admin.pages.*') ? 'text-white' : 'text-gray-400 group-hover:text-white' }}"></i>
+                        <span>Pages</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.reports.index') }}"
+                        class="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors group {{ request()->routeIs('admin.reports.*') ? 'bg-orange-500 text-white font-semibold' : 'text-gray-400 hover:text-white hover:bg-gray-800' }}">
+                        <i class="bx bx-bar-chart-alt-2 text-xl {{ request()->routeIs('admin.reports.*') ? 'text-white' : 'text-gray-400 group-hover:text-white' }}"></i>
+                        <span>Reports</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.activity.index') }}"
+                        class="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors group {{ request()->routeIs('admin.activity.*') ? 'bg-orange-500 text-white font-semibold' : 'text-gray-400 hover:text-white hover:bg-gray-800' }}">
+                        <i class="bx bx-list-ul text-xl {{ request()->routeIs('admin.activity.*') ? 'text-white' : 'text-gray-400 group-hover:text-white' }}"></i>
+                        <span>System Activity</span>
                     </a>
                 </li>
             </ul>

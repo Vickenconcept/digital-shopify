@@ -3,7 +3,7 @@
 <article class="flex flex-col overflow-hidden rounded-lg shadow-lg">
     <div class="flex-shrink-0">
         @if($post->featured_image)
-            <img class="h-48 w-full object-cover" src="{{ Storage::url($post->featured_image) }}" alt="{{ $post->title }}">
+            <img class="h-48 w-full object-cover" src="{{ $post->featured_image }}" alt="{{ $post->title }}">
         @else
             <div class="h-48 w-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
                 <svg class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">

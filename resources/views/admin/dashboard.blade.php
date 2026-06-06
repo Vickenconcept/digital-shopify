@@ -247,6 +247,50 @@
             </div>
         </div>
 
+        <!-- Recent System Activity -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-8">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-900">Recent System Activity</h3>
+                    <a href="{{ route('admin.activity.index') }}" class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-orange-600 hover:text-orange-500">
+                        View full audit
+                        <svg class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <ul class="divide-y divide-gray-100">
+                @forelse($recentActivity as $log)
+                    <li class="px-6 py-4 flex items-start gap-4 hover:bg-gray-50">
+                        <span class="inline-flex shrink-0 px-2 py-0.5 text-xs font-medium rounded-full
+                            @if($log->badge_color === 'green') bg-green-100 text-green-800
+                            @elseif($log->badge_color === 'blue') bg-blue-100 text-blue-800
+                            @elseif($log->badge_color === 'orange') bg-orange-100 text-orange-800
+                            @elseif($log->badge_color === 'purple') bg-purple-100 text-purple-800
+                            @elseif($log->badge_color === 'indigo') bg-indigo-100 text-indigo-800
+                            @else bg-gray-100 text-gray-800
+                            @endif">
+                            {{ $log->log_label }}
+                        </span>
+                        <div class="min-w-0 flex-1">
+                            <p class="text-sm text-gray-900">{{ $log->description }}</p>
+                            <p class="mt-0.5 text-xs text-gray-500">
+                                {{ $log->created_at->diffForHumans() }}
+                                @if($log->causer)
+                                    · {{ $log->causer->name ?? $log->causer->email }}
+                                @endif
+                            </p>
+                        </div>
+                    </li>
+                @empty
+                    <li class="px-6 py-8 text-center text-sm text-gray-500">
+                        No activity recorded yet. Actions across the site will appear here.
+                    </li>
+                @endforelse
+            </ul>
+        </div>
+
         <!-- Recent Orders -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
             <div class="px-6 py-4 border-b border-gray-200">

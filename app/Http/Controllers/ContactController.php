@@ -3,12 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ContactMail;
-use App\Models\NewsletterSubscription;
+use App\Models\ActivityLog;
+use App\Services\ActivityLogger;
+use App\Support\AdminNotifications;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
 {
+    public function __construct(
+        private readonly ActivityLogger $activityLogger,
+    ) {}
     public function index()
     {
         return view('contact');
@@ -30,30 +35,36 @@ class ContactController extends Controller
         ]);
 
         // Get the admin email from config or use a default
-        $adminEmail = config('mail.contact_recipient', config('mail.from.address'));
+        $adminEmail = \App\Support\MailRecipients::admin();
 
         // Send email using the ContactMail mailable
-        Mail::to($adminEmail)->send(new ContactMail(
-            $validated['name'],
-            $validated['email'],
-            $validated['subject'],
-            $validated['message']
-        ));
+        if (AdminNotifications::isEnabled('contact')) {
+            Mail::to($adminEmail)->send(new ContactMail(
+                $validated['name'],
+                $validated['email'],
+                $validated['subject'],
+                $validated['message']
+            ));
+
+            $this->activityLogger->log(
+                ActivityLog::LOG_EMAIL,
+                'sent',
+                "Contact form email queued for admin from {$validated['email']}",
+                properties: ['subject' => $validated['subject']]
+            );
+        }
+
+        $this->activityLogger->log(
+            ActivityLog::LOG_CONTACT,
+            'submitted',
+            "Contact form submitted: {$validated['subject']}",
+            properties: [
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'subject' => $validated['subject'],
+            ]
+        );
 
         return back()->with('success', 'Thank you for your message. We will get back to you soon!');
-    }
-
-    public function newsletter(Request $request)
-    {
-        $validated = $request->validate([
-            'email' => 'required|email|max:255|unique:newsletter_subscriptions,email',
-        ]);
-
-        NewsletterSubscription::create([
-            'email' => $validated['email'],
-            'subscribed_at' => now(),
-        ]);
-
-        return back()->with('success', 'Thank you for subscribing to our newsletter!');
     }
 }

@@ -1,4 +1,10 @@
 <x-main-layout>
+    @seo([
+        'title' => ($product->meta_title ?: $product->title) . ' | Your Journey Voices',
+        'description' => $product->meta_description ?: \Illuminate\Support\Str::limit(strip_tags($product->description), 160),
+        'image' => $product->og_image ?: $product->thumbnail_path,
+        'site_name' => 'Your Journey Voices',
+    ])
     <div class="bg-white" x-data="{
         inWishlist: false,
         productId: {{ $product->id }},
@@ -74,12 +80,14 @@
                                 </svg>
                             </div>
                         </li>
+                        @if($product->category)
                         <li>
                             <div class="flex items-center text-sm">
                                 <a href="{{ route('products.index', ['category' => $product->category->slug]) }}"
                                     class="font-medium text-gray-500 hover:text-gray-900">{{ $product->category->name }}</a>
                             </div>
                         </li>
+                        @endif
                     </ol>
                 </nav>
 
@@ -280,14 +288,15 @@
         </button>
 
         <!-- Cart drawer -->
-        <div x-show="open" class="relative z-50" aria-labelledby="slide-over-title" role="dialog"
-            aria-modal="true">
+        <div x-show="open" x-cloak style="display: none;" class="relative z-50" aria-labelledby="slide-over-title" role="dialog"
+            aria-modal="true" :class="{ 'pointer-events-none': !open }">
             <div x-show="open" x-transition:enter="ease-in-out duration-500" x-transition:enter-start="opacity-0"
                 x-transition:enter-end="opacity-100" x-transition:leave="ease-in-out duration-500"
                 x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                @click="open = false"
                 class="fixed inset-0 bg-gray-500/75 transition-opacity"></div>
 
-            <div class="fixed inset-0 overflow-hidden">
+            <div class="fixed inset-0 overflow-hidden pointer-events-none">
                 <div class="absolute inset-0 overflow-hidden">
                     <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
                         <div x-show="open"
@@ -295,7 +304,7 @@
                             x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0"
                             x-transition:leave="transform transition ease-in-out duration-500 sm:duration-700"
                             x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full"
-                            class="pointer-events-auto w-screen max-w-md">
+                            class="pointer-events-auto w-screen max-w-md" @click.stop>
                             <div class="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
                                 <div class="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
                                     <div class="flex items-start justify-between">

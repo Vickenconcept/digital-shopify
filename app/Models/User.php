@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Notifications\VerifyEmailNotification;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasRoles;
@@ -52,6 +53,20 @@ class User extends Authenticatable
         ];
     }
 
+    public function hasVerifiedEmail(): bool
+    {
+        if ($this->hasAnyRole(['admin', 'super-admin'])) {
+            return true;
+        }
+
+        return $this->email_verified_at !== null;
+    }
+
+    public function sendEmailVerificationNotification(): void
+    {
+        $this->notify(new VerifyEmailNotification);
+    }
+
     public function isTwitterConnected()
     {
         return $this->twitter_account_connected && $this->twitter_account_id && $this->twitter_access_token;
@@ -65,6 +80,11 @@ class User extends Authenticatable
     public function digitalProducts()
     {
         return $this->hasMany(DigitalProduct::class);
+    }
+
+    public function blogs()
+    {
+        return $this->hasMany(Blog::class);
     }
 
     public function orders()

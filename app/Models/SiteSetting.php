@@ -24,6 +24,14 @@ class SiteSetting extends Model
         'instagram_link',
         'youtube_link',
         'tiktok_link',
+        'contact_email',
+        'contact_phone',
+        'contact_address',
+        'notify_admin_new_order',
+        'notify_admin_new_user',
+        'notify_admin_contact',
+        'audit_log_retention_days',
+        'tax_rate',
         'hero_image_1',
         'hero_image_2',
         'hero_image_3',
@@ -34,6 +42,11 @@ class SiteSetting extends Model
 
     protected $casts = [
         'weekly_theme_start_date' => 'date',
+        'notify_admin_new_order' => 'boolean',
+        'notify_admin_new_user' => 'boolean',
+        'notify_admin_contact' => 'boolean',
+        'audit_log_retention_days' => 'integer',
+        'tax_rate' => 'decimal:2',
     ];
 
     public function isCurrentWeeklyTheme(): bool

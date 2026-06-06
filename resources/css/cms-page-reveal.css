@@ -1,0 +1,70 @@
+/* CMS / GrapesJS page scroll & load animations (disabled when user prefers reduced motion) */
+@media (prefers-reduced-motion: no-preference) {
+    .cms-page-content .yjv-hero-part {
+        opacity: 0;
+        transform: translateY(28px);
+        transition:
+            opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+            transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .cms-page-content.yjv-page-ready .yjv-hero-part {
+        opacity: 1;
+        transform: none;
+    }
+
+    .cms-page-content.yjv-page-ready .pg-hero-text,
+    .cms-page-content.yjv-page-ready .h-hero-text {
+        transition-delay: 0.05s;
+    }
+
+    .cms-page-content.yjv-page-ready .pg-hero-img-wrap,
+    .cms-page-content.yjv-page-ready .h-hero-img-wrap {
+        transition-delay: 0.18s;
+    }
+
+    .cms-page-content .yjv-reveal {
+        opacity: 0;
+        transform: translateY(36px);
+        transition:
+            opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+            transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        transition-delay: var(--yjv-delay, 0s);
+        will-change: opacity, transform;
+    }
+
+    .cms-page-content .yjv-reveal.yjv-in-view {
+        opacity: 1;
+        transform: none;
+    }
+
+    .cms-page-content .yjv-reveal-fade {
+        transform: none;
+    }
+
+    .cms-page-content .yjv-reveal-scale {
+        transform: scale(0.96);
+    }
+
+    .cms-page-content .yjv-reveal-scale.yjv-in-view {
+        transform: scale(1);
+    }
+
+    /* Extra polish on cards once visible */
+    .cms-page-content .pg-feature.yjv-in-view,
+    .cms-page-content .h-cat.yjv-in-view,
+    .cms-page-content .yjv-card.yjv-in-view {
+        transition:
+            opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+            transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+            box-shadow 0.25s ease;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cms-page-content .yjv-reveal,
+    .cms-page-content .yjv-hero-part {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}

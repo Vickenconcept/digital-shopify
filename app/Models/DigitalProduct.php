@@ -13,6 +13,9 @@ class DigitalProduct extends Model
     protected $fillable = [
         'title',
         'author',
+        'meta_title',
+        'meta_description',
+        'og_image',
         'slug',
         'description',
         'price',

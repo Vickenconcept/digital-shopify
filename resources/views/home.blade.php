@@ -191,8 +191,8 @@
 
         <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
             @foreach($categories as $category)
-                <a href="{{ route('products.index', ['category' => $category->slug]) }}" class="group shadow-2xl shadow-blue-100">
-                    <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200">
+                <a href="{{ route('products.index', ['category' => $category->slug]) }}" class="group shadow-2xl shadow-blue-100 rounded-lg">
+                    <div class="h-44 w-full overflow-hidden rounded-lg bg-gray-200">
                         @if($category->image_path)
                             <img src="{{ $category->image_path }}" alt="{{ $category->name }}" class="h-full w-full object-cover object-center group-hover:opacity-75">
                         @else
@@ -201,8 +201,8 @@
                             </div>
                         @endif
                     </div>
-                    <h3 class="mt-4 text-sm text-gray-700">{{ $category->name }}</h3>
-                    <p class="mt-1 text-sm text-gray-500">{{ $category->digital_products_count }} Products</p>
+                    <h3 class="mt-4 text-sm text-gray-700 px-2">{{ $category->name }}</h3>
+                    <p class="mt-1 text-sm text-gray-500 p-2">{{ $category->digital_products_count }} Products</p>
                 </a>
             @endforeach
         </div>

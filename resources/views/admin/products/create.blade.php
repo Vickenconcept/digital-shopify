@@ -75,6 +75,8 @@
                                 <p class="mt-2 text-sm text-gray-500">Provide a detailed description of your product.</p>
                             </div>
 
+                            @include('admin.partials.seo-fields', ['model' => new \App\Models\DigitalProduct()])
+
                             <!-- Category & Type -->
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                 <!-- Category -->

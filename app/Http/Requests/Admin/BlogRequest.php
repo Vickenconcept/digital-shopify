@@ -24,6 +24,9 @@ class BlogRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'max:255'],
             'excerpt' => ['nullable', 'string'],
+            'meta_title' => ['nullable', 'string', 'max:255'],
+            'meta_description' => ['nullable', 'string', 'max:500'],
+            'og_image' => ['nullable', 'url', 'max:500'],
             'content' => ['required', 'string'],
             'featured_image' => ['nullable', 'image', 'max:2048', 'mimes:png,jpg,jpeg,gif,webp,svg,psd'], // 2MB max
             'youtube_url' => ['nullable', 'url', 'max:255'],

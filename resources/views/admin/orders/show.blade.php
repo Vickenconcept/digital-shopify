@@ -121,6 +121,7 @@
                     </div>
                     <div class="divide-y divide-gray-200">
                         @foreach($order->items as $item)
+                            @if($item->product)
                             <div class="p-6">
                                 <div class="flex items-center">
                                     <div class="flex-shrink-0 h-16 w-16">
@@ -141,15 +142,17 @@
                                             <div>
                                                 <h4 class="text-lg font-medium text-gray-900">
                                                     <a href="{{ route('admin.products.edit', $item->product) }}" class="hover:text-blue-600">
-                                                        {{ $item->product->title }}
+                                                        {{ optional($item->product)->title }}
                                                     </a>
                                                 </h4>
                                                 <div class="mt-1 flex items-center space-x-2 text-sm text-gray-500">
                                                     <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
                                                         {{ ucfirst($item->product->file_type) }}
                                                     </span>
-                                                    <span>•</span>
-                                                    <span>{{ $item->product->category->name }}</span>
+                                                    @if($item->product->category)
+                                                        <span>•</span>
+                                                        <span>{{ $item->product->category->name }}</span>
+                                                    @endif
                                                 </div>
                                             </div>
                                             <div class="text-right">
@@ -160,6 +163,7 @@
                                     </div>
                                 </div>
                             </div>
+                            @endif
                         @endforeach
                     </div>
                     <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">

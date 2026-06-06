@@ -7,6 +7,8 @@ use App\Http\Requests\Admin\BlogRequest;
 use App\Models\Blog;
 use App\Services\FileUploadService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class BlogController extends Controller
@@ -82,7 +84,20 @@ class BlogController extends Controller
                 $data['featured_image'] = $this->fileUploadService->uploadFile($request->file('featured_image'), 'blog/images');
             }
 
-            Blog::create($data);
+            $blog = Blog::create($data);
+
+            // Send email notification
+            try {
+                $adminEmail = \App\Support\MailRecipients::admin();
+                $blogUrl = route('blog.show', $blog->slug);
+                
+                Mail::raw("A new blog post has been created.\n\nBlog Details:\nTitle: {$blog->title}\nStatus: " . ($blog->is_published ? 'Published' : 'Draft') . "\nFeatured: " . ($blog->is_featured ? 'Yes' : 'No') . "\n\nExcerpt:\n" . ($blog->excerpt ?? 'No excerpt') . "\n\nView Blog: {$blogUrl}\n\nCreated by: " . auth()->user()->name, function ($message) use ($adminEmail, $blog) {
+                    $message->to($adminEmail)
+                        ->subject('New Blog Post Created: ' . $blog->title);
+                });
+            } catch (\Exception $e) {
+                Log::error('Failed to send blog creation email: ' . $e->getMessage());
+            }
 
             return redirect()->route('admin.blogs.index')
                 ->with('success', 'Blog post created successfully.');
@@ -126,6 +141,19 @@ class BlogController extends Controller
 
             $blog->update($data);
 
+            // Send email notification
+            try {
+                $adminEmail = \App\Support\MailRecipients::admin();
+                $blogUrl = route('blog.show', $blog->slug);
+                
+                Mail::raw("A blog post has been updated.\n\nBlog Details:\nTitle: {$blog->title}\nStatus: " . ($blog->is_published ? 'Published' : 'Draft') . "\nFeatured: " . ($blog->is_featured ? 'Yes' : 'No') . "\n\nExcerpt:\n" . ($blog->excerpt ?? 'No excerpt') . "\n\nView Blog: {$blogUrl}\n\nUpdated by: " . auth()->user()->name, function ($message) use ($adminEmail, $blog) {
+                    $message->to($adminEmail)
+                        ->subject('Blog Post Updated: ' . $blog->title);
+                });
+            } catch (\Exception $e) {
+                Log::error('Failed to send blog update email: ' . $e->getMessage());
+            }
+
             return redirect()->route('admin.blogs.index')
                 ->with('success', 'Blog post updated successfully.');
         } catch (\Exception $e) {
@@ -140,7 +168,21 @@ class BlogController extends Controller
      */
     public function destroy(Blog $blog)
     {
+        $blogTitle = $blog->title;
         $blog->delete();
+
+        // Send email notification
+        try {
+            $adminEmail = \App\Support\MailRecipients::admin();
+            
+            Mail::raw("A blog post has been deleted.\n\nBlog Details:\nTitle: {$blogTitle}\n\nDeleted by: " . auth()->user()->name . "\nDeleted at: " . now()->format('Y-m-d H:i:s'), function ($message) use ($adminEmail, $blogTitle) {
+                $message->to($adminEmail)
+                    ->subject('Blog Post Deleted: ' . $blogTitle);
+            });
+        } catch (\Exception $e) {
+            Log::error('Failed to send blog deletion email: ' . $e->getMessage());
+        }
+
         return redirect()->route('admin.blogs.index')
             ->with('success', 'Blog post deleted successfully.');
     }

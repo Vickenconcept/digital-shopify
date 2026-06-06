@@ -18,8 +18,22 @@
     @livewireStyles
 </head>
 
-<body class="h-full font-sans antialiased bg-white">
+<body class="h-full font-sans antialiased bg-white" x-data="{ sidebarOpen: false }" @keydown.window.escape="sidebarOpen = false">
     <div class="min-h-full">
+        {{-- Mobile sidebar backdrop (replaces Flowbite drawer overlay) --}}
+        <div x-show="sidebarOpen"
+             x-cloak
+             x-transition:enter="transition-opacity ease-linear duration-200"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="transition-opacity ease-linear duration-200"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             @click="sidebarOpen = false"
+             class="fixed inset-0 z-40 bg-gray-900/50 lg:hidden"
+             style="display: none;"
+             aria-hidden="true"></div>
+
         <!-- Sidebar -->
         <x-sidebar />
 
@@ -30,9 +44,11 @@
                 class="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
                 <div class="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
                     <div class="flex flex-1">
-                        <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar"
-                            aria-controls="logo-sidebar" type="button"
-                            class="inline-flex items-center p-2 text-gray-400 rounded-lg sm:hidden  hover:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors">
+                        <button type="button"
+                            @click="sidebarOpen = !sidebarOpen"
+                            aria-controls="logo-sidebar"
+                            :aria-expanded="sidebarOpen"
+                            class="inline-flex items-center p-2 text-gray-400 rounded-lg lg:hidden hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors">
                             <span class="sr-only">Close sidebar</span>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke-width="1.5" stroke="currentColor" class="size-6">

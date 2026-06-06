@@ -136,6 +136,10 @@
             <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
                 <form class="space-y-6" action="{{ route('auth.register') }}" method="post">
                     @csrf
+                    <div style="position:absolute;left:-9999px;opacity:0;pointer-events:none" aria-hidden="true">
+                        <label for="website">Website</label>
+                        <input type="text" name="website" id="website" tabindex="-1" autocomplete="off">
+                    </div>
                     <div>
                         <label for="email" class="block text-sm font-medium text-gray-700">
                             Name

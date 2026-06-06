@@ -334,7 +334,9 @@
                                         <div class="text-sm text-gray-900">{{ $order->items->count() }} {{ Str::plural('item', $order->items->count()) }}</div>
                                         <div class="text-xs text-gray-500">
                                             @foreach($order->items->take(2) as $item)
-                                                {{ Str::limit($item->product->title, 25) }}@if(!$loop->last), @endif
+                                                @if($item->product)
+                                                    {{ Str::limit($item->product->title, 25) }}@if(!$loop->last), @endif
+                                                @endif
                                             @endforeach
                                             @if($order->items->count() > 2)
                                                 <br>+{{ $order->items->count() - 2 }} more
@@ -408,7 +410,7 @@
                             <div class="mb-4">
                                 <div class="text-sm font-medium text-gray-700 mb-1">Items:</div>
                                 @foreach($order->items as $item)
-                                    <div class="text-sm text-gray-600">• {{ $item->product->title }}</div>
+                                    <div class="text-sm text-gray-600">• {{ optional($item->product)->title }}</div>
                                 @endforeach
                             </div>
                             

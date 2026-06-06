@@ -339,7 +339,9 @@
                                             @else
                                                 <p class="text-lg font-bold text-gray-900">${{ number_format($product->price, 2) }}</p>
                                             @endif
-                                            <p class="text-xs text-gray-500">by {{ $product->user->name }}</p>
+                                            @if($product->user)
+                                                <p class="text-xs text-gray-500">by {{ $product->user->name }}</p>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>

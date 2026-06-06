@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
 use App\Models\DigitalProduct;
 use App\Models\Order;
 use App\Models\User;
@@ -73,6 +74,12 @@ class DashboardController extends Controller
             ->pluck('count', 'payment_status')
             ->toArray();
 
+        $recentActivity = ActivityLog::query()
+            ->with('causer')
+            ->latest('created_at')
+            ->take(8)
+            ->get();
+
         return view('admin.dashboard', compact(
             'totalProducts',
             'totalOrders',
@@ -88,7 +95,8 @@ class DashboardController extends Controller
             'recentOrdersList',
             'topProducts',
             'monthlyRevenue',
-            'orderStatuses'
+            'orderStatuses',
+            'recentActivity'
         ));
     }
 }

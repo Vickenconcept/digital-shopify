@@ -3,20 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
 use App\Models\SiteSetting;
-use App\Services\FileUploadService;
+use App\Services\ActivityLogger;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class SiteSettingController extends Controller
 {
-    protected FileUploadService $fileUploadService;
-
-    public function __construct(FileUploadService $fileUploadService)
-    {
-        $this->fileUploadService = $fileUploadService;
-    }
-
+    public function __construct(
+        private readonly ActivityLogger $activityLogger,
+    ) {}
     public function index()
     {
         $settings = SiteSetting::firstOrCreate([]);
@@ -28,51 +24,35 @@ class SiteSettingController extends Controller
         $settings = SiteSetting::firstOrCreate([]);
         
         $validated = $request->validate([
-            'weekly_theme_title' => 'nullable|string|max:255',
-            'weekly_theme_description' => 'nullable|string',
-            'weekly_theme_start_date' => 'nullable|date',
-            'monday_message' => 'nullable|string',
-            'tuesday_message' => 'nullable|string',
-            'wednesday_message' => 'nullable|string',
-            'thursday_message' => 'nullable|string',
-            'friday_message' => 'nullable|string',
-            'saturday_message' => 'nullable|string',
-            'sunday_message' => 'nullable|string',
-            'cta_button_text' => 'nullable|string|max:255',
+            'contact_email' => 'nullable|email|max:255',
+            'contact_phone' => 'nullable|string|max:50',
+            'contact_address' => 'nullable|string|max:1000',
+            'notify_admin_new_order' => 'sometimes|boolean',
+            'notify_admin_new_user' => 'sometimes|boolean',
+            'notify_admin_contact' => 'sometimes|boolean',
+            'audit_log_retention_days' => 'nullable|integer|min:0|max:3650',
+            'tax_rate' => 'nullable|numeric|min:0|max:100',
             'facebook_link' => 'nullable|url|max:255',
             'twitter_link' => 'nullable|url|max:255',
             'instagram_link' => 'nullable|url|max:255',
             'youtube_link' => 'nullable|url|max:255',
             'tiktok_link' => 'nullable|url|max:255',
-            'hero_image_1' => 'nullable|image|max:2048|mimes:png,jpg,jpeg,gif,webp,svg,psd',
-            'hero_image_2' => 'nullable|image|max:2048|mimes:png,jpg,jpeg,gif,webp,svg,psd',
-            'hero_image_3' => 'nullable|image|max:2048|mimes:png,jpg,jpeg,gif,webp,svg,psd',
-            'banner_image_1' => 'nullable|image|max:2048|mimes:png,jpg,jpeg,gif,webp,svg,psd',
-            'banner_image_2' => 'nullable|image|max:2048|mimes:png,jpg,jpeg,gif,webp,svg,psd',
-            'banner_image_3' => 'nullable|image|max:2048|mimes:png,jpg,jpeg,gif,webp,svg,psd',
         ]);
 
-        // Handle text inputs
-        $settings->fill($request->except([
-            'hero_image_1', 'hero_image_2', 'hero_image_3',
-            'banner_image_1', 'banner_image_2', 'banner_image_3'
-        ]));
+        $validated['notify_admin_new_order'] = $request->boolean('notify_admin_new_order');
+        $validated['notify_admin_new_user'] = $request->boolean('notify_admin_new_user');
+        $validated['notify_admin_contact'] = $request->boolean('notify_admin_contact');
 
-        // Handle hero images
-        for ($i = 1; $i <= 3; $i++) {
-            if ($request->hasFile("hero_image_$i")) {
-                $settings->{"hero_image_$i"} = $this->fileUploadService->uploadFile($request->file("hero_image_$i"), 'settings/hero');
-            }
-        }
-
-        // Handle banner images
-        for ($i = 1; $i <= 3; $i++) {
-            if ($request->hasFile("banner_image_$i")) {
-                $settings->{"banner_image_$i"} = $this->fileUploadService->uploadFile($request->file("banner_image_$i"), 'settings/banners');
-            }
-        }
-
+        $settings->fill($validated);
         $settings->save();
+
+        $this->activityLogger->log(
+            ActivityLog::LOG_SETTINGS,
+            'updated',
+            'Site settings updated',
+            $settings,
+            properties: array_keys($validated)
+        );
 
         return redirect()->route('admin.settings.index')
             ->with('success', 'Site settings updated successfully.');

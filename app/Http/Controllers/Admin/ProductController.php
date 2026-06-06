@@ -8,6 +8,8 @@ use App\Models\Category;
 use App\Models\DigitalProduct;
 use App\Services\FileUploadService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class ProductController extends Controller
@@ -117,7 +119,20 @@ class ProductController extends Controller
             $data['preview_path'] = $this->fileUploadService->uploadPreview($request->file('preview'), $data['file_type']);
         }
 
-        DigitalProduct::create($data);
+        $product = DigitalProduct::create($data);
+
+        // Send email notification
+        try {
+            $adminEmail = \App\Support\MailRecipients::admin();
+            $productUrl = route('products.show', $product->slug);
+            
+            Mail::raw("A new product has been created.\n\nProduct Details:\nTitle: {$product->title}\nPrice: " . ($product->is_free ? 'Free' : '$' . number_format($product->price, 2)) . "\nType: {$product->file_type}\nStatus: " . ($product->is_active ? 'Active' : 'Inactive') . "\n\nView Product: {$productUrl}\n\nCreated by: " . auth()->user()->name, function ($message) use ($adminEmail, $product) {
+                $message->to($adminEmail)
+                    ->subject('New Product Created: ' . $product->title);
+            });
+        } catch (\Exception $e) {
+            Log::error('Failed to send product creation email: ' . $e->getMessage());
+        }
 
         return redirect()->route('admin.products.index')
             ->with('success', 'Product created successfully.');
@@ -169,6 +184,19 @@ class ProductController extends Controller
 
         $product->update($data);
 
+        // Send email notification
+        try {
+            $adminEmail = \App\Support\MailRecipients::admin();
+            $productUrl = route('products.show', $product->slug);
+            
+            Mail::raw("A product has been updated.\n\nProduct Details:\nTitle: {$product->title}\nPrice: " . ($product->is_free ? 'Free' : '$' . number_format($product->price, 2)) . "\nType: {$product->file_type}\nStatus: " . ($product->is_active ? 'Active' : 'Inactive') . "\n\nView Product: {$productUrl}\n\nUpdated by: " . auth()->user()->name, function ($message) use ($adminEmail, $product) {
+                $message->to($adminEmail)
+                    ->subject('Product Updated: ' . $product->title);
+            });
+        } catch (\Exception $e) {
+            Log::error('Failed to send product update email: ' . $e->getMessage());
+        }
+
         return redirect()->route('admin.products.index')
             ->with('success', 'Product updated successfully.');
     }
@@ -178,7 +206,21 @@ class ProductController extends Controller
      */
     public function destroy(DigitalProduct $product)
     {
+        $productTitle = $product->title;
         $product->delete();
+
+        // Send email notification
+        try {
+            $adminEmail = \App\Support\MailRecipients::admin();
+            
+            Mail::raw("A product has been deleted.\n\nProduct Details:\nTitle: {$productTitle}\n\nDeleted by: " . auth()->user()->name . "\nDeleted at: " . now()->format('Y-m-d H:i:s'), function ($message) use ($adminEmail, $productTitle) {
+                $message->to($adminEmail)
+                    ->subject('Product Deleted: ' . $productTitle);
+            });
+        } catch (\Exception $e) {
+            Log::error('Failed to send product deletion email: ' . $e->getMessage());
+        }
+
         return redirect()->route('admin.products.index')
             ->with('success', 'Product deleted successfully.');
     }

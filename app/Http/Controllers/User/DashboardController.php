@@ -55,7 +55,7 @@ class DashboardController extends Controller
             ->unique('id');
 
         $availableTypes = $allPurchasedProducts->pluck('file_type')->unique()->values();
-        $availableCategories = $allPurchasedProducts->pluck('category')->unique('id')->values();
+        $availableCategories = $allPurchasedProducts->pluck('category')->filter()->unique('id')->values();
 
         return view('user.dashboard', compact('purchasedProducts', 'availableTypes', 'availableCategories'));
     }
@@ -95,55 +95,5 @@ class DashboardController extends Controller
         $availableStatuses = Auth::user()->orders()->distinct()->pluck('payment_status');
 
         return view('user.orders', compact('orders', 'availableStatuses'));
-    }
-
-    public function download(Request $request, $productId)
-    {
-        $user = Auth::user();
-        $hasPurchased = $user->orders()
-            ->where('payment_status', 'completed')
-            ->whereHas('items', function ($query) use ($productId) {
-                $query->where('digital_product_id', $productId);
-            })
-            ->exists();
-
-        if (!$hasPurchased) {
-            abort(403, 'You have not purchased this product.');
-        }
-
-        $product = \App\Models\DigitalProduct::findOrFail($productId);
-        
-        // Check if file path exists (Cloudinary URL)
-        if (!$product->file_path) {
-            abort(404, 'File not found.');
-        }
-
-        // Redirect to Cloudinary URL for download
-        return redirect($product->file_path);
-    }
-
-    public function stream(Request $request, $productId)
-    {
-        $user = Auth::user();
-        $hasPurchased = $user->orders()
-            ->where('payment_status', 'completed')
-            ->whereHas('items', function ($query) use ($productId) {
-                $query->where('digital_product_id', $productId);
-            })
-            ->exists();
-
-        if (!$hasPurchased) {
-            abort(403, 'You have not purchased this product.');
-        }
-
-        $product = \App\Models\DigitalProduct::findOrFail($productId);
-        
-        // Check if file path exists (Cloudinary URL)
-        if (!$product->file_path) {
-            abort(404, 'File not found.');
-        }
-
-        // Redirect to Cloudinary URL for streaming
-        return redirect($product->file_path);
     }
 }

@@ -244,7 +244,7 @@
                                             <td class="px-6 py-4">
                                                 <div class="text-sm text-gray-900">
                                                     @foreach($order->items->take(3) as $item)
-                                                        <div class="truncate">{{ $item->product->title }}</div>
+                                                        <div class="truncate">{{ optional($item->product)->title }}</div>
                                                     @endforeach
                                                     @if($order->items->count() > 3)
                                                         <div class="text-xs text-gray-500">+{{ $order->items->count() - 3 }} more</div>
@@ -265,7 +265,8 @@
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                 @if($order->payment_status === 'completed')
-                                                    <a href="{{ route('user.dashboard') }}" class="text-indigo-600 hover:text-indigo-900">View Products</a>
+                                                    <a href="{{ route('user.orders.receipt', $order) }}" class="text-orange-600 hover:text-orange-800 mr-3">Receipt</a>
+                                                    <a href="{{ route('user.dashboard') }}" class="text-indigo-600 hover:text-indigo-900">Library</a>
                                                 @endif
                                             </td>
                                         </tr>
@@ -297,7 +298,7 @@
                                     <div class="mb-4">
                                         <div class="text-sm font-medium text-gray-700 mb-2">Items:</div>
                                         @foreach($order->items as $item)
-                                            <div class="text-sm text-gray-600">• {{ $item->product->title }}</div>
+                                            <div class="text-sm text-gray-600">• {{ optional($item->product)->title }}</div>
                                         @endforeach
                                     </div>
                                     

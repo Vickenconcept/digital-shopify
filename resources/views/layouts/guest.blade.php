@@ -8,25 +8,21 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @seo([
-        'title' => 'videngager',
-        'description' => 'videngager',
+        'title' => 'yourjourneyvoices',
+        'description' => 'yourjourneyvoices',
         'image' => asset('images/login-image.png'),
         'site_name' => config('app.name'),
         'favicon' => asset('favicon.ico'),
     ])
 
-    <title>videngager</title>
+    <meta  href="{{ asset('favicon.ico') }}"  rel="icon" />
 
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <title>yourjourneyvoices</title>
 
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
 
-
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    
-
-
 
     @yield('styles')
 
@@ -34,35 +30,34 @@
 </head>
 
 <body class="h-full !font-['Poppins']">
-    <marquee direction="right" scrollamount="60" class="z-50 fixed w-full hidden" id="hiddenLinearPreloader">
-        <div class="bg-gradient-to-r from-gray-800 from-70%  to-indigo-500 w-[700px] p-1 rounded-full"></div>
-    </marquee>
+    <div
+        id="page-loading-bar"
+        class="z-50 fixed top-0 left-0 w-full hidden pointer-events-none"
+        aria-hidden="true"
+    >
+        <div class="bg-gradient-to-r from-gray-800 from-70% to-orange-500 h-1 w-full"></div>
+    </div>
+
     {{ $slot }}
 
 </body>
 
-
-
 <script>
-    window.addEventListener('beforeunload', function(event) {
-        var hiddenText = document.getElementById('hiddenText');
-        hiddenText.classList.remove('hidden');
-        hiddenLinearPreloader.classList.remove("hidden");
+    document.addEventListener('DOMContentLoaded', function () {
+        var bar = document.getElementById('page-loading-bar');
+        if (!bar) return;
+
+        bar.classList.remove('hidden');
+
+        setTimeout(function () {
+            bar.classList.add('hidden');
+        }, 400);
     });
-
-    document.addEventListener("DOMContentLoaded", function() {
-            var hiddenLinearPreloader = document.getElementById("hiddenLinearPreloader");
-
-            hiddenLinearPreloader.classList.remove("hidden");
-
-            setTimeout(function() {
-                hiddenLinearPreloader.classList.add("hidden");
-            }, 2000);
-        });
 </script>
-
 
 @yield('scripts')
 @livewireScripts
+
+<x-cookie-consent />
 
 </html>

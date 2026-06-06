@@ -15,13 +15,13 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $query = User::with(['roles', 'profile']);
-
+        
         // Apply search filter
         if ($request->has('search') && $request->search) {
             $searchTerm = $request->search;
             $query->where(function($q) use ($searchTerm) {
                 $q->where('name', 'like', "%{$searchTerm}%")
-                  ->orWhere('email', 'like', "%{$searchTerm}%");
+                ->orWhere('email', 'like', "%{$searchTerm}%");
             });
         }
 
@@ -62,6 +62,7 @@ class UserController extends Controller
 
         // Get filter options
         $availableRoles = Role::orderBy('name')->get();
+
 
         return view('admin.users.index', compact('users', 'availableRoles'));
     }

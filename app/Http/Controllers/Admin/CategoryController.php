@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Services\FileUploadService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class CategoryController extends Controller
@@ -86,7 +88,19 @@ class CategoryController extends Controller
             $validated['image_path'] = $this->fileUploadService->uploadFile($request->file('image_path'), 'categories');
         }
 
-        Category::create($validated);
+        $category = Category::create($validated);
+
+        // Send email notification
+        try {
+            $adminEmail = \App\Support\MailRecipients::admin();
+            
+            Mail::raw("A new category has been created.\n\nCategory Details:\nName: {$category->name}\nSlug: {$category->slug}\nStatus: " . ($category->is_active ? 'Active' : 'Inactive') . "\nDescription: " . ($category->description ?? 'No description') . "\n\nCreated by: " . auth()->user()->name, function ($message) use ($adminEmail, $category) {
+                $message->to($adminEmail)
+                    ->subject('New Category Created: ' . $category->name);
+            });
+        } catch (\Exception $e) {
+            Log::error('Failed to send category creation email: ' . $e->getMessage());
+        }
 
         return redirect()->route('admin.categories.index')
             ->with('success', 'Category created successfully.');
@@ -128,6 +142,18 @@ class CategoryController extends Controller
 
         $category->update($validated);
 
+        // Send email notification
+        try {
+            $adminEmail = \App\Support\MailRecipients::admin();
+            
+            Mail::raw("A category has been updated.\n\nCategory Details:\nName: {$category->name}\nSlug: {$category->slug}\nStatus: " . ($category->is_active ? 'Active' : 'Inactive') . "\nDescription: " . ($category->description ?? 'No description') . "\n\nUpdated by: " . auth()->user()->name, function ($message) use ($adminEmail, $category) {
+                $message->to($adminEmail)
+                    ->subject('Category Updated: ' . $category->name);
+            });
+        } catch (\Exception $e) {
+            Log::error('Failed to send category update email: ' . $e->getMessage());
+        }
+
         return redirect()->route('admin.categories.index')
             ->with('success', 'Category updated successfully.');
     }
@@ -137,7 +163,21 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        $categoryName = $category->name;
         $category->delete();
+
+        // Send email notification
+        try {
+            $adminEmail = \App\Support\MailRecipients::admin();
+            
+            Mail::raw("A category has been deleted.\n\nCategory Details:\nName: {$categoryName}\n\nDeleted by: " . auth()->user()->name . "\nDeleted at: " . now()->format('Y-m-d H:i:s'), function ($message) use ($adminEmail, $categoryName) {
+                $message->to($adminEmail)
+                    ->subject('Category Deleted: ' . $categoryName);
+            });
+        } catch (\Exception $e) {
+            Log::error('Failed to send category deletion email: ' . $e->getMessage());
+        }
+
         return redirect()->route('admin.categories.index')
             ->with('success', 'Category deleted successfully.');
     }
